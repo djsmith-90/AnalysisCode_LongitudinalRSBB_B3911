@@ -5431,16 +5431,39 @@ table(data$b032, useNA = "ifany")
 #### Now conduct multinomial regression for each method and for each covariate (all with adjust for age, other than the age-only model). Will calculate p-values using Wald/z-tests (for simple guide to multinomial regression in R, see: https://stats.oarc.ucla.edu/r/dae/multinomial-logistic-regression/)
 library(nnet)
 
+## Initialise a dataframe to save results to
+results_meth1 <- data.frame(exposure = character(), exp_level = character(), outcome_level = character(),
+                            RRR = numeric(), lower_ci = numeric(), upper_ci = numeric(), 
+                            p = numeric(), p_exp = numeric())
+
+
 ### Method 1
 table(data$belief_meth1, useNA = "ifany")
 
 ## Age at birth
 
 # Descriptives
-data %>%
+(meth1_data_age <- data %>%
   filter(complete.cases(belief_meth1, mz028b)) %>%
   group_by(belief_meth1) %>%
-  summarise(n = n(), mean = mean(mz028b), sd = sd(mz028b))
+  summarise(n = n(), mean = mean(mz028b), sd = sd(mz028b), se = sd/sqrt(n),
+            lower_ci = mean - (qt(0.975, df = n - 1) * se), upper_ci = mean + (qt(0.975, df = n - 1) * se)))
+
+# Make plot of results
+(meth1_age_plot <- ggplot(meth1_data_age) +
+  geom_point(aes(x = belief_meth1, y = mean), size = 6, shape = 18) +
+  geom_errorbar(aes(x = belief_meth1, ymin = lower_ci, ymax = upper_ci), width = 0.5, size = 1) +
+  ylab("Mean age at birth (years)") + xlab("Change in belief from pregnancy to age 9") +
+  ylim(28, 30) + theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  scale_x_discrete(labels = c("ConsNonBel" = "Consistent non-believer \n(n=2,865)", 
+                              "ConsBel" = "Consistent believer \n(n=2,906)",
+                              "NewBel" = "New believer \n(n=587)", "NewNonBel" = "New non-believer \n(n=855)")) +
+  theme(axis.text = element_text(size = 14), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth1_age_plot.pdf", height = 6, width = 10)
+plot(meth1_age_plot)
+dev.off()
 
 # Model
 meth1_age <- multinom(belief_meth1 ~ mz028b, data = data)
@@ -5456,12 +5479,63 @@ p
 exp(coef(meth1_age))
 exp(confint(meth1_age))
 
+# Compare to null model
+meth1_null <- multinom(belief_meth1 ~ 1, data = data, subset = !is.na(mz028b))
+anova(meth1_null, meth1_age)
+
+# Add results to results dataframe
+results_meth1 <- rbind(results_meth1,
+                       setNames(data.frame("AgeAtBirth (years)", "NA", "ConsBel", 
+                                           round(exp(coef(meth1_age)["ConsBel", "mz028b"]), 2),
+                                           round(exp(confint(meth1_age)["mz028b", "2.5 %", "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_age)["mz028b", "97.5 %", "ConsBel"]), 2), 
+                                           round(p["ConsBel", "mz028b"], 3), 
+                                           round(anova(meth1_null, meth1_age)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("AgeAtBirth (years)", "NA", "NewBel", 
+                                           round(exp(coef(meth1_age)["NewBel", "mz028b"]), 2),
+                                           round(exp(confint(meth1_age)["mz028b", "2.5 %", "NewBel"]), 2), 
+                                           round(exp(confint(meth1_age)["mz028b", "97.5 %", "NewBel"]), 2), 
+                                           round(p["NewBel", "mz028b"], 3),
+                                           round(anova(meth1_null, meth1_age)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("AgeAtBirth (years)", "NA", "NewNonBel", 
+                                           round(exp(coef(meth1_age)["NewNonBel", "mz028b"]), 2),
+                                           round(exp(confint(meth1_age)["mz028b", "2.5 %", "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_age)["mz028b", "97.5 %", "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "mz028b"], 3),
+                                           round(anova(meth1_null, meth1_age)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)))
+
+results_meth1
+
 
 ## Ethnicity
 
 # Descriptives
 table(data$belief_meth1, data$c800)
 round(prop.table(table(data$belief_meth1, data$c800), 1) * 100, 2)
+
+# And make stacked bar-plot of results
+(meth1_data_eth <- data %>%
+    filter(complete.cases(belief_meth1, c800)) %>%
+    group_by(belief_meth1, c800) %>%
+    summarise(n = n()))
+
+(meth1_eth_plot <- ggplot(meth1_data_eth, aes(fill = fct_rev(c800), y = n, x = belief_meth1)) +
+    geom_bar(position = "fill", stat = "identity") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("ConsNonBel" = "Consistent non-believer \n(n=2,812)", 
+                                "ConsBel" = "Consistent believer \n(n=2,844)",
+                                "NewBel" = "New believer \n(n=574)", "NewNonBel" = "New non-believer \n(n=834)")) +
+    labs(fill = "Ethnicity") +
+    theme(axis.text = element_text(size = 12), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth1_ethnicity_plot.pdf", height = 6, width = 10)
+plot(meth1_eth_plot)
+dev.off()
 
 # Model
 meth1_ethnic <- multinom(belief_meth1 ~ c800 + mz028b, data = data)
@@ -5477,12 +5551,69 @@ p
 exp(coef(meth1_ethnic))
 exp(confint(meth1_ethnic))
 
+# Compare to null age_only model
+meth1_age <- multinom(belief_meth1 ~ mz028b, data = data, subset = !is.na(c800))
+anova(meth1_age, meth1_ethnic)
+
+# Add results to results dataframe
+results_meth1 <- rbind(results_meth1,
+                       setNames(data.frame("Ethnicity (ref=White)", "Other than White", "ConsBel", 
+                                           round(exp(coef(meth1_ethnic)["ConsBel", "c800Other than White"]), 2),
+                                           round(exp(confint(meth1_ethnic)["c800Other than White", "2.5 %", 
+                                                                           "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_ethnic)["c800Other than White", "97.5 %", 
+                                                                           "ConsBel"]), 2), 
+                                           round(p["ConsBel", "c800Other than White"], 3), 
+                                           round(anova(meth1_age, meth1_ethnic)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Ethnicity (ref=White)", "Other than White", "NewBel", 
+                                           round(exp(coef(meth1_ethnic)["NewBel", "c800Other than White"]), 2),
+                                           round(exp(confint(meth1_ethnic)["c800Other than White", "2.5 %", 
+                                                                           "NewBel"]), 2), 
+                                           round(exp(confint(meth1_ethnic)["c800Other than White", "97.5 %", 
+                                                                           "NewBel"]), 2), 
+                                           round(p["NewBel", "c800Other than White"], 3),
+                                           round(anova(meth1_age, meth1_ethnic)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Ethnicity (ref=White)", "Other than White", "NewNonBel", 
+                                           round(exp(coef(meth1_ethnic)["NewNonBel", "c800Other than White"]), 2),
+                                           round(exp(confint(meth1_ethnic)["c800Other than White", "2.5 %",
+                                                                           "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_ethnic)["c800Other than White", "97.5 %",
+                                                                           "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "c800Other than White"], 3),
+                                           round(anova(meth1_age, meth1_ethnic)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)))
+
+results_meth1
+
 
 ## Maternal education
 
 # Descriptives
 table(data$belief_meth1, data$c645a)
 round(prop.table(table(data$belief_meth1, data$c645a), 1) * 100, 2)
+
+# And make stacked bar-plot of results
+(meth1_data_edu <- data %>%
+    filter(complete.cases(belief_meth1, c645a)) %>%
+    group_by(belief_meth1, c645a) %>%
+    summarise(n = n()))
+
+(meth1_edu_plot <- ggplot(meth1_data_edu, aes(fill = fct_rev(c645a), y = n, x = belief_meth1)) +
+    geom_bar(position = "fill", stat = "identity") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("ConsNonBel" = "Consistent non-believer \n(n=2,815)", 
+                                "ConsBel" = "Consistent believer \n(n=2,854)",
+                                "NewBel" = "New believer \n(n=576)", "NewNonBel" = "New non-believer \n(n=838)")) +
+    labs(fill = "Educational attainment") +
+    theme(axis.text = element_text(size = 12), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth1_education_plot.pdf", height = 6, width = 10)
+plot(meth1_edu_plot)
+dev.off()
 
 # Model
 meth1_edu <- multinom(belief_meth1 ~ c645a + mz028b, data = data)
@@ -5498,14 +5629,149 @@ p
 exp(coef(meth1_edu))
 exp(confint(meth1_edu))
 
+# Compare to null age_only model
+meth1_age <- multinom(belief_meth1 ~ mz028b, data = data, subset = !is.na(c645a))
+anova(meth1_age, meth1_edu)
+
+# Add results to results dataframe
+results_meth1 <- rbind(results_meth1,
+                       setNames(data.frame("Education (ref=CSE/None)", "Vocational", "ConsBel", 
+                                           round(exp(coef(meth1_edu)["ConsBel", "c645aVocational"]), 2),
+                                           round(exp(confint(meth1_edu)["c645aVocational", "2.5 %", 
+                                                                           "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_edu)["c645aVocational", "97.5 %", 
+                                                                           "ConsBel"]), 2), 
+                                           round(p["ConsBel", "c645aVocational"], 3), 
+                                           round(anova(meth1_age, meth1_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Education (ref=CSE/None)", "O level", "ConsBel", 
+                                           round(exp(coef(meth1_edu)["ConsBel", "c645aO level"]), 2),
+                                           round(exp(confint(meth1_edu)["c645aO level", "2.5 %", 
+                                                                        "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_edu)["c645aO level", "97.5 %", 
+                                                                        "ConsBel"]), 2), 
+                                           round(p["ConsBel", "c645aO level"], 3), 
+                                           round(anova(meth1_age, meth1_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Education (ref=CSE/None)", "A level", "ConsBel", 
+                                           round(exp(coef(meth1_edu)["ConsBel", "c645aA level"]), 2),
+                                           round(exp(confint(meth1_edu)["c645aA level", "2.5 %", 
+                                                                        "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_edu)["c645aA level", "97.5 %", 
+                                                                        "ConsBel"]), 2), 
+                                           round(p["ConsBel", "c645aA level"], 3), 
+                                           round(anova(meth1_age, meth1_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Education (ref=CSE/None)", "Degree", "ConsBel", 
+                                           round(exp(coef(meth1_edu)["ConsBel", "c645aDegree"]), 2),
+                                           round(exp(confint(meth1_edu)["c645aDegree", "2.5 %", 
+                                                                        "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_edu)["c645aDegree", "97.5 %", 
+                                                                        "ConsBel"]), 2), 
+                                           round(p["ConsBel", "c645aDegree"], 3), 
+                                           round(anova(meth1_age, meth1_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Education (ref=CSE/None)", "Vocational", "NewBel", 
+                                           round(exp(coef(meth1_edu)["NewBel", "c645aVocational"]), 2),
+                                           round(exp(confint(meth1_edu)["c645aVocational", "2.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(exp(confint(meth1_edu)["c645aVocational", "97.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(p["NewBel", "c645aVocational"], 3), 
+                                           round(anova(meth1_age, meth1_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Education (ref=CSE/None)", "O level", "NewBel", 
+                                           round(exp(coef(meth1_edu)["NewBel", "c645aO level"]), 2),
+                                           round(exp(confint(meth1_edu)["c645aO level", "2.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(exp(confint(meth1_edu)["c645aO level", "97.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(p["NewBel", "c645aO level"], 3), 
+                                           round(anova(meth1_age, meth1_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Education (ref=CSE/None)", "A level", "NewBel", 
+                                           round(exp(coef(meth1_edu)["NewBel", "c645aA level"]), 2),
+                                           round(exp(confint(meth1_edu)["c645aA level", "2.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(exp(confint(meth1_edu)["c645aA level", "97.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(p["NewBel", "c645aA level"], 3), 
+                                           round(anova(meth1_age, meth1_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Education (ref=CSE/None)", "Degree", "NewBel", 
+                                           round(exp(coef(meth1_edu)["NewBel", "c645aDegree"]), 2),
+                                           round(exp(confint(meth1_edu)["c645aDegree", "2.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(exp(confint(meth1_edu)["c645aDegree", "97.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(p["NewBel", "c645aDegree"], 3), 
+                                           round(anova(meth1_age, meth1_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Education (ref=CSE/None)", "Vocational", "NewNonBel", 
+                                           round(exp(coef(meth1_edu)["NewNonBel", "c645aVocational"]), 2),
+                                           round(exp(confint(meth1_edu)["c645aVocational", "2.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_edu)["c645aVocational", "97.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "c645aVocational"], 3), 
+                                           round(anova(meth1_age, meth1_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Education (ref=CSE/None)", "O level", "NewNonBel", 
+                                           round(exp(coef(meth1_edu)["NewNonBel", "c645aO level"]), 2),
+                                           round(exp(confint(meth1_edu)["c645aO level", "2.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_edu)["c645aO level", "97.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "c645aO level"], 3), 
+                                           round(anova(meth1_age, meth1_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Education (ref=CSE/None)", "A level", "NewNonBel", 
+                                           round(exp(coef(meth1_edu)["NewNonBel", "c645aA level"]), 2),
+                                           round(exp(confint(meth1_edu)["c645aA level", "2.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_edu)["c645aA level", "97.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "c645aA level"], 3), 
+                                           round(anova(meth1_age, meth1_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Education (ref=CSE/None)", "Degree", "NewNonBel", 
+                                           round(exp(coef(meth1_edu)["NewNonBel", "c645aDegree"]), 2),
+                                           round(exp(confint(meth1_edu)["c645aDegree", "2.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_edu)["c645aDegree", "97.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "c645aDegree"], 3), 
+                                           round(anova(meth1_age, meth1_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1))
+                       )
+
+results_meth1
+
 
 ## Household income
 
 # Descriptives
-data %>%
+(meth1_data_income <- data %>%
   filter(complete.cases(belief_meth1, logavinceq)) %>%
   group_by(belief_meth1) %>%
-  summarise(n = n(), mean = mean(logavinceq), sd = sd(logavinceq))
+  summarise(n = n(), mean = mean(logavinceq), sd = sd(logavinceq), se = sd/sqrt(n),
+            lower_ci = mean - (qt(0.975, df = n - 1) * se), upper_ci = mean + (qt(0.975, df = n - 1) * se)))
+
+# Make plot of results
+(meth1_income_plot <- ggplot(meth1_data_income) +
+    geom_point(aes(x = belief_meth1, y = mean), size = 6, shape = 18) +
+    geom_errorbar(aes(x = belief_meth1, ymin = lower_ci, ymax = upper_ci), width = 0.5, size = 1) +
+    ylab("Mean weekly household income (log GBP)") + xlab("Change in belief from pregnancy to age 9") +
+    ylim(5.25, 5.45) + theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("ConsNonBel" = "Consistent non-believer \n(n=2,652)", 
+                                "ConsBel" = "Consistent believer \n(n=2,652)",
+                                "NewBel" = "New believer \n(n=536)", "NewNonBel" = "New non-believer \n(n=809)")) +
+    theme(axis.text = element_text(size = 14), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth1_income_plot.pdf", height = 6, width = 10)
+plot(meth1_income_plot)
+dev.off()
 
 # Model
 meth1_income <- multinom(belief_meth1 ~ logavinceq + mz028b, data = data)
@@ -5521,12 +5787,63 @@ p
 exp(coef(meth1_income))
 exp(confint(meth1_income))
 
+# Compare to null age_only model
+meth1_age <- multinom(belief_meth1 ~ mz028b, data = data, subset = !is.na(logavinceq))
+anova(meth1_age, meth1_income)
+
+# Add results to results dataframe
+results_meth1 <- rbind(results_meth1,
+                       setNames(data.frame("Income (log GBP)", "NA", "ConsBel", 
+                                           round(exp(coef(meth1_income)["ConsBel", "logavinceq"]), 2),
+                                           round(exp(confint(meth1_income)["logavinceq", "2.5 %", "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_income)["logavinceq", "97.5 %", "ConsBel"]), 2), 
+                                           round(p["ConsBel", "logavinceq"], 3), 
+                                           round(anova(meth1_age, meth1_income)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Income (log GBP)", "NA", "NewBel", 
+                                           round(exp(coef(meth1_income)["NewBel", "logavinceq"]), 2),
+                                           round(exp(confint(meth1_income)["logavinceq", "2.5 %", "NewBel"]), 2), 
+                                           round(exp(confint(meth1_income)["logavinceq", "97.5 %", "NewBel"]), 2), 
+                                           round(p["NewBel", "logavinceq"], 3),
+                                           round(anova(meth1_age, meth1_income)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Income (log GBP)", "NA", "NewNonBel", 
+                                           round(exp(coef(meth1_income)["NewNonBel", "logavinceq"]), 2),
+                                           round(exp(confint(meth1_income)["logavinceq", "2.5 %", "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_income)["logavinceq", "97.5 %", "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "logavinceq"], 3),
+                                           round(anova(meth1_age, meth1_income)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)))
+
+results_meth1
+
 
 ## Home ownership
 
 # Descriptives
 table(data$belief_meth1, data$a006)
 round(prop.table(table(data$belief_meth1, data$a006), 1) * 100, 2)
+
+# And make stacked bar-plot of results
+(meth1_data_home <- data %>%
+    filter(complete.cases(belief_meth1, a006)) %>%
+    group_by(belief_meth1, a006) %>%
+    summarise(n = n()))
+
+(meth1_home_plot <- ggplot(meth1_data_home, aes(fill = fct_rev(a006), y = n, x = belief_meth1)) +
+    geom_bar(position = "fill", stat = "identity") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("ConsNonBel" = "Consistent non-believer \n(n=2,818)", 
+                                "ConsBel" = "Consistent believer \n(n=2,856)",
+                                "NewBel" = "New believer \n(n=575)", "NewNonBel" = "New non-believer \n(n=839)")) +
+    labs(fill = "Home Ownership Status") +
+    theme(axis.text = element_text(size = 12), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth1_homeOwnership_plot.pdf", height = 6, width = 10)
+plot(meth1_home_plot)
+dev.off()
 
 # Model
 meth1_home <- multinom(belief_meth1 ~ a006 + mz028b, data = data)
@@ -5542,12 +5859,124 @@ p
 exp(coef(meth1_home))
 exp(confint(meth1_home))
 
+# Compare to null age_only model
+meth1_age <- multinom(belief_meth1 ~ mz028b, data = data, subset = !is.na(a006))
+anova(meth1_age, meth1_home)
+
+# Add results to results dataframe
+results_meth1 <- rbind(results_meth1,
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Rented", "ConsBel", 
+                                           round(exp(coef(meth1_home)["ConsBel", "a006Rented"]), 2),
+                                           round(exp(confint(meth1_home)["a006Rented", "2.5 %", 
+                                                                        "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_home)["a006Rented", "97.5 %", 
+                                                                        "ConsBel"]), 2), 
+                                           round(p["ConsBel", "a006Rented"], 3), 
+                                           round(anova(meth1_age, meth1_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Council/HA", "ConsBel", 
+                                           round(exp(coef(meth1_home)["ConsBel", "a006Council/HA"]), 2),
+                                           round(exp(confint(meth1_home)["a006Council/HA", "2.5 %", 
+                                                                        "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_home)["a006Council/HA", "97.5 %", 
+                                                                        "ConsBel"]), 2), 
+                                           round(p["ConsBel", "a006Council/HA"], 3), 
+                                           round(anova(meth1_age, meth1_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Other", "ConsBel", 
+                                           round(exp(coef(meth1_home)["ConsBel", "a006Other"]), 2),
+                                           round(exp(confint(meth1_home)["a006Other", "2.5 %", 
+                                                                        "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_home)["a006Other", "97.5 %", 
+                                                                        "ConsBel"]), 2), 
+                                           round(p["ConsBel", "a006Other"], 3), 
+                                           round(anova(meth1_age, meth1_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Rented", "NewBel", 
+                                           round(exp(coef(meth1_home)["NewBel", "a006Rented"]), 2),
+                                           round(exp(confint(meth1_home)["a006Rented", "2.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(exp(confint(meth1_home)["a006Rented", "97.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(p["NewBel", "a006Rented"], 3), 
+                                           round(anova(meth1_age, meth1_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Council/HA", "NewBel", 
+                                           round(exp(coef(meth1_home)["NewBel", "a006Council/HA"]), 2),
+                                           round(exp(confint(meth1_home)["a006Council/HA", "2.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(exp(confint(meth1_home)["a006Council/HA", "97.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(p["NewBel", "a006Council/HA"], 3), 
+                                           round(anova(meth1_age, meth1_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Other", "NewBel", 
+                                           round(exp(coef(meth1_home)["NewBel", "a006Other"]), 2),
+                                           round(exp(confint(meth1_home)["a006Other", "2.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(exp(confint(meth1_home)["a006Other", "97.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(p["NewBel", "a006Other"], 3), 
+                                           round(anova(meth1_age, meth1_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Rented", "NewNonBel", 
+                                           round(exp(coef(meth1_home)["NewNonBel", "a006Rented"]), 2),
+                                           round(exp(confint(meth1_home)["a006Rented", "2.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_home)["a006Rented", "97.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "a006Rented"], 3), 
+                                           round(anova(meth1_age, meth1_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Council/HA", "NewNonBel", 
+                                           round(exp(coef(meth1_home)["NewNonBel", "a006Council/HA"]), 2),
+                                           round(exp(confint(meth1_home)["a006Council/HA", "2.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_home)["a006Council/HA", "97.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "a006Council/HA"], 3), 
+                                           round(anova(meth1_age, meth1_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Other", "NewNonBel", 
+                                           round(exp(coef(meth1_home)["NewNonBel", "a006Other"]), 2),
+                                           round(exp(confint(meth1_home)["a006Other", "2.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_home)["a006Other", "97.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "a006Other"], 3), 
+                                           round(anova(meth1_age, meth1_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1))
+                       )
+
+results_meth1
+
 
 ## IMD
 
 # Descriptives
 table(data$belief_meth1, data$dimd2010q5)
 round(prop.table(table(data$belief_meth1, data$dimd2010q5), 1) * 100, 2)
+
+# And make stacked bar-plot of results
+(meth1_data_imd <- data %>%
+    filter(complete.cases(belief_meth1, dimd2010q5)) %>%
+    group_by(belief_meth1, dimd2010q5) %>%
+    summarise(n = n()))
+
+(meth1_imd_plot <- ggplot(meth1_data_imd, aes(fill = fct_rev(dimd2010q5), y = n, x = belief_meth1)) +
+    geom_bar(position = "fill", stat = "identity") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("ConsNonBel" = "Consistent non-believer \n(n=2,645)", 
+                                "ConsBel" = "Consistent believer \n(n=2,670)",
+                                "NewBel" = "New believer \n(n=545)", "NewNonBel" = "New non-believer \n(n=791)")) +
+    labs(fill = "IMD Quintile") +
+    theme(axis.text = element_text(size = 12), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth1_IMD_plot.pdf", height = 6, width = 10)
+plot(meth1_imd_plot)
+dev.off()
 
 # Model
 meth1_imd <- multinom(belief_meth1 ~ dimd2010q5 + mz028b, data = data)
@@ -5563,12 +5992,151 @@ p
 exp(coef(meth1_imd))
 exp(confint(meth1_imd))
 
+# Compare to null age_only model
+meth1_age <- multinom(belief_meth1 ~ mz028b, data = data, subset = !is.na(dimd2010q5))
+anova(meth1_age, meth1_imd)
+
+# Add results to results dataframe
+results_meth1 <- rbind(results_meth1,
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 2", "ConsBel", 
+                                           round(exp(coef(meth1_imd)["ConsBel", "dimd2010q5Quintile 2"]), 2),
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 2", "2.5 %", 
+                                                                         "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 2", "97.5 %", 
+                                                                         "ConsBel"]), 2), 
+                                           round(p["ConsBel", "dimd2010q5Quintile 2"], 3), 
+                                           round(anova(meth1_age, meth1_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 3", "ConsBel", 
+                                           round(exp(coef(meth1_imd)["ConsBel", "dimd2010q5Quintile 3"]), 2),
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 3", "2.5 %", 
+                                                                         "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 3", "97.5 %", 
+                                                                         "ConsBel"]), 2), 
+                                           round(p["ConsBel", "dimd2010q5Quintile 3"], 3), 
+                                           round(anova(meth1_age, meth1_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 4", "ConsBel", 
+                                           round(exp(coef(meth1_imd)["ConsBel", "dimd2010q5Quintile 4"]), 2),
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 4", "2.5 %", 
+                                                                         "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 4", "97.5 %", 
+                                                                         "ConsBel"]), 2), 
+                                           round(p["ConsBel", "dimd2010q5Quintile 4"], 3), 
+                                           round(anova(meth1_age, meth1_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quin. 5/Most dep.", "ConsBel", 
+                                           round(exp(coef(meth1_imd)["ConsBel", "dimd2010q5Quin. 5/Most deprived"]), 2),
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quin. 5/Most deprived", "2.5 %", 
+                                                                        "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quin. 5/Most deprived", "97.5 %", 
+                                                                        "ConsBel"]), 2), 
+                                           round(p["ConsBel", "dimd2010q5Quin. 5/Most deprived"], 3), 
+                                           round(anova(meth1_age, meth1_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 2", "NewBel", 
+                                           round(exp(coef(meth1_imd)["NewBel", "dimd2010q5Quintile 2"]), 2),
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 2", "2.5 %", 
+                                                                         "NewBel"]), 2), 
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 2", "97.5 %", 
+                                                                         "NewBel"]), 2), 
+                                           round(p["NewBel", "dimd2010q5Quintile 2"], 3), 
+                                           round(anova(meth1_age, meth1_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 3", "NewBel", 
+                                           round(exp(coef(meth1_imd)["NewBel", "dimd2010q5Quintile 3"]), 2),
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 3", "2.5 %", 
+                                                                         "NewBel"]), 2), 
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 3", "97.5 %", 
+                                                                         "NewBel"]), 2), 
+                                           round(p["NewBel", "dimd2010q5Quintile 3"], 3), 
+                                           round(anova(meth1_age, meth1_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 4", "NewBel", 
+                                           round(exp(coef(meth1_imd)["NewBel", "dimd2010q5Quintile 4"]), 2),
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 4", "2.5 %", 
+                                                                         "NewBel"]), 2), 
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 4", "97.5 %", 
+                                                                         "NewBel"]), 2), 
+                                           round(p["NewBel", "dimd2010q5Quintile 4"], 3), 
+                                           round(anova(meth1_age, meth1_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quin. 5/Most dep.", "NewBel", 
+                                           round(exp(coef(meth1_imd)["NewBel", "dimd2010q5Quin. 5/Most deprived"]), 2),
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quin. 5/Most deprived", "2.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quin. 5/Most deprived", "97.5 %", 
+                                                                        "NewBel"]), 2), 
+                                           round(p["NewBel", "dimd2010q5Quin. 5/Most deprived"], 3), 
+                                           round(anova(meth1_age, meth1_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 2", "NewNonBel", 
+                                           round(exp(coef(meth1_imd)["NewNonBel", "dimd2010q5Quintile 2"]), 2),
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 2", "2.5 %", 
+                                                                         "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 2", "97.5 %", 
+                                                                         "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "dimd2010q5Quintile 2"], 3), 
+                                           round(anova(meth1_age, meth1_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 3", "NewNonBel", 
+                                           round(exp(coef(meth1_imd)["NewNonBel", "dimd2010q5Quintile 3"]), 2),
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 3", "2.5 %", 
+                                                                         "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 3", "97.5 %", 
+                                                                         "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "dimd2010q5Quintile 3"], 3), 
+                                           round(anova(meth1_age, meth1_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 4", "NewNonBel", 
+                                           round(exp(coef(meth1_imd)["NewNonBel", "dimd2010q5Quintile 4"]), 2),
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 4", "2.5 %", 
+                                                                         "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quintile 4", "97.5 %", 
+                                                                         "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "dimd2010q5Quintile 4"], 3), 
+                                           round(anova(meth1_age, meth1_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quin. 5/Most dep.", "NewNonBel", 
+                                           round(exp(coef(meth1_imd)["NewNonBel", "dimd2010q5Quin. 5/Most deprived"]), 2),
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quin. 5/Most deprived", "2.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_imd)["dimd2010q5Quin. 5/Most deprived", "97.5 %", 
+                                                                        "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "dimd2010q5Quin. 5/Most deprived"], 3), 
+                                           round(anova(meth1_age, meth1_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1))
+)
+
+results_meth1
+
 
 ## First-time mum
 
 # Descriptives
 table(data$belief_meth1, data$b032)
 round(prop.table(table(data$belief_meth1, data$b032), 1) * 100, 2)
+
+# And make stacked bar-plot of results
+(meth1_data_firstMum <- data %>%
+    filter(complete.cases(belief_meth1, b032)) %>%
+    group_by(belief_meth1, b032) %>%
+    summarise(n = n()))
+
+(meth1_firstMum_plot <- ggplot(meth1_data_firstMum, aes(fill = fct_rev(b032), y = n, x = belief_meth1)) +
+    geom_bar(position = "fill", stat = "identity") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("ConsNonBel" = "Consistent non-believer \n(n=2,795)", 
+                                "ConsBel" = "Consistent believer \n(n=2,851)",
+                                "NewBel" = "New believer \n(n=575)", "NewNonBel" = "New non-believer \n(n=832)")) +
+    labs(fill = "First-time Mother") +
+    theme(axis.text = element_text(size = 12), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth1_firstMum_plot.pdf", height = 6, width = 10)
+plot(meth1_firstMum_plot)
+dev.off()
 
 # Model
 meth1_firstMum <- multinom(belief_meth1 ~ b032 + mz028b, data = data)
@@ -5584,18 +6152,80 @@ p
 exp(coef(meth1_firstMum))
 exp(confint(meth1_firstMum))
 
+# Compare to null age_only model
+meth1_age <- multinom(belief_meth1 ~ mz028b, data = data, subset = !is.na(b032))
+anova(meth1_age, meth1_firstMum)
+
+# Add results to results dataframe
+results_meth1 <- rbind(results_meth1,
+                       setNames(data.frame("First-time Mother (ref=No)", "New Mother", "ConsBel", 
+                                           round(exp(coef(meth1_firstMum)["ConsBel", "b032NewMum"]), 2),
+                                           round(exp(confint(meth1_firstMum)["b032NewMum", "2.5 %", 
+                                                                           "ConsBel"]), 2), 
+                                           round(exp(confint(meth1_firstMum)["b032NewMum", "97.5 %", 
+                                                                           "ConsBel"]), 2), 
+                                           round(p["ConsBel", "b032NewMum"], 3), 
+                                           round(anova(meth1_age, meth1_firstMum)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("First-time Mother (ref=No)", "New Mother", "NewBel", 
+                                           round(exp(coef(meth1_firstMum)["NewBel", "b032NewMum"]), 2),
+                                           round(exp(confint(meth1_firstMum)["b032NewMum", "2.5 %", 
+                                                                           "NewBel"]), 2), 
+                                           round(exp(confint(meth1_firstMum)["b032NewMum", "97.5 %", 
+                                                                           "NewBel"]), 2), 
+                                           round(p["NewBel", "b032NewMum"], 3),
+                                           round(anova(meth1_age, meth1_firstMum)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)),
+                       setNames(data.frame("First-time Mother (ref=No)", "New Mother", "NewNonBel", 
+                                           round(exp(coef(meth1_firstMum)["NewNonBel", "b032NewMum"]), 2),
+                                           round(exp(confint(meth1_firstMum)["b032NewMum", "2.5 %",
+                                                                           "NewNonBel"]), 2), 
+                                           round(exp(confint(meth1_firstMum)["b032NewMum", "97.5 %",
+                                                                           "NewNonBel"]), 2), 
+                                           round(p["NewNonBel", "b032NewMum"], 3),
+                                           round(anova(meth1_age, meth1_firstMum)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth1)))
+
+results_meth1
+
+
+## Save this results table
+write_csv(results_meth1, "./Results/results_meth1.csv")
+
 
 
 ### Method 2
 table(data$belief_meth2, useNA = "ifany")
 
+## Initialise a dataframe to save results to
+results_meth2 <- data.frame(exposure = character(), exp_level = character(), outcome_level = character(),
+                            RRR = numeric(), lower_ci = numeric(), upper_ci = numeric(), 
+                            p = numeric(), p_exp = numeric())
+
 ## Age at birth
 
 # Descriptives
-data %>%
-  filter(complete.cases(belief_meth2, mz028b)) %>%
-  group_by(belief_meth2) %>%
-  summarise(n = n(), mean = mean(mz028b), sd = sd(mz028b))
+(meth2_data_age <- data %>%
+    filter(complete.cases(belief_meth2, mz028b)) %>%
+    group_by(belief_meth2) %>%
+    summarise(n = n(), mean = mean(mz028b), sd = sd(mz028b), se = sd/sqrt(n),
+              lower_ci = mean - (qt(0.975, df = n - 1) * se), upper_ci = mean + (qt(0.975, df = n - 1) * se)))
+
+# Make plot of results
+(meth2_age_plot <- ggplot(meth2_data_age) +
+    geom_point(aes(x = belief_meth2, y = mean), size = 6, shape = 18) +
+    geom_errorbar(aes(x = belief_meth2, ymin = lower_ci, ymax = upper_ci), width = 0.5, size = 1) +
+    ylab("Mean age at birth (years)") + xlab("Change in belief from pregnancy to age 9") +
+    ylim(26, 30) + theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("NoChange" = "No change \n(n=5,088)", "SmallInc" = "Small increase \n(n=748)",
+                                "BigInc" = "Large increase \n(n=57)", "SmallDec" = "Small decrease \n(n=1,212)",
+                                "BigDec" = "Large decrease \n(n=108)")) +
+    theme(axis.text = element_text(size = 14), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth2_age_plot.pdf", height = 6, width = 10)
+plot(meth2_age_plot)
+dev.off()
 
 # Model
 meth2_age <- multinom(belief_meth2 ~ mz028b, data = data)
@@ -5611,12 +6241,71 @@ p
 exp(coef(meth2_age))
 exp(confint(meth2_age))
 
+# Compare to null model
+meth2_null <- multinom(belief_meth2 ~ 1, data = data, subset = !is.na(mz028b))
+anova(meth2_null, meth2_age)
+
+# Add results to results dataframe
+results_meth2 <- rbind(results_meth2,
+                       setNames(data.frame("AgeAtBirth (years)", "NA", "SmallInc", 
+                                           round(exp(coef(meth2_age)["SmallInc", "mz028b"]), 2),
+                                           round(exp(confint(meth2_age)["mz028b", "2.5 %", "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_age)["mz028b", "97.5 %", "SmallInc"]), 2), 
+                                           round(p["SmallInc", "mz028b"], 3), 
+                                           round(anova(meth2_null, meth2_age)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("AgeAtBirth (years)", "NA", "BigInc", 
+                                           round(exp(coef(meth2_age)["BigInc", "mz028b"]), 2),
+                                           round(exp(confint(meth2_age)["mz028b", "2.5 %", "BigInc"]), 2), 
+                                           round(exp(confint(meth2_age)["mz028b", "97.5 %", "BigInc"]), 2), 
+                                           round(p["BigInc", "mz028b"], 3),
+                                           round(anova(meth2_null, meth2_age)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("AgeAtBirth (years)", "NA", "SmallDec", 
+                                           round(exp(coef(meth2_age)["SmallDec", "mz028b"]), 2),
+                                           round(exp(confint(meth2_age)["mz028b", "2.5 %", "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_age)["mz028b", "97.5 %", "SmallDec"]), 2), 
+                                           round(p["SmallDec", "mz028b"], 3),
+                                           round(anova(meth2_null, meth2_age)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("AgeAtBirth (years)", "NA", "BigDec", 
+                                           round(exp(coef(meth2_age)["BigDec", "mz028b"]), 2),
+                                           round(exp(confint(meth2_age)["mz028b", "2.5 %", "BigDec"]), 2), 
+                                           round(exp(confint(meth2_age)["mz028b", "97.5 %", "BigDec"]), 2), 
+                                           round(p["BigDec", "mz028b"], 3),
+                                           round(anova(meth2_null, meth2_age)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2))
+                       )
+
+results_meth2
+
 
 ## Ethnicity
 
 # Descriptives
 table(data$belief_meth2, data$c800)
 round(prop.table(table(data$belief_meth2, data$c800), 1) * 100, 2)
+
+# And make stacked bar-plot of results
+(meth2_data_eth <- data %>%
+    filter(complete.cases(belief_meth2, c800)) %>%
+    group_by(belief_meth2, c800) %>%
+    summarise(n = n()))
+
+(meth2_eth_plot <- ggplot(meth2_data_eth, aes(fill = fct_rev(c800), y = n, x = belief_meth2)) +
+    geom_bar(position = "fill", stat = "identity") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("NoChange" = "No change \n(n=4,986)", "SmallInc" = "Small increase \n(n=729)",
+                                "BigInc" = "Large increase \n(n=56)", "SmallDec" = "Small decrease \n(n=1,190)",
+                                "BigDec" = "Large decrease \n(n=103)")) +
+    labs(fill = "Ethnicity") +
+    theme(axis.text = element_text(size = 12), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth2_ethnicity_plot.pdf", height = 6, width = 10)
+plot(meth2_eth_plot)
+dev.off()
 
 # Model
 meth2_ethnic <- multinom(belief_meth2 ~ c800 + mz028b, data = data)
@@ -5632,12 +6321,79 @@ p
 exp(coef(meth2_ethnic))
 exp(confint(meth2_ethnic))
 
+# Compare to null age_only model
+meth2_age <- multinom(belief_meth2 ~ mz028b, data = data, subset = !is.na(c800))
+anova(meth2_age, meth2_ethnic)
+
+# Add results to results dataframe
+results_meth2 <- rbind(results_meth2,
+                       setNames(data.frame("Ethnicity (ref=White)", "Other than White", "SmallInc", 
+                                           round(exp(coef(meth2_ethnic)["SmallInc", "c800Other than White"]), 2),
+                                           round(exp(confint(meth2_ethnic)["c800Other than White", "2.5 %", 
+                                                                           "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_ethnic)["c800Other than White", "97.5 %", 
+                                                                           "SmallInc"]), 2), 
+                                           round(p["SmallInc", "c800Other than White"], 3), 
+                                           round(anova(meth2_age, meth2_ethnic)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Ethnicity (ref=White)", "Other than White", "BigInc", 
+                                           round(exp(coef(meth2_ethnic)["BigInc", "c800Other than White"]), 2),
+                                           round(exp(confint(meth2_ethnic)["c800Other than White", "2.5 %", 
+                                                                           "BigInc"]), 2), 
+                                           round(exp(confint(meth2_ethnic)["c800Other than White", "97.5 %", 
+                                                                           "BigInc"]), 2), 
+                                           round(p["BigInc", "c800Other than White"], 3),
+                                           round(anova(meth2_age, meth2_ethnic)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Ethnicity (ref=White)", "Other than White", "SmallDec", 
+                                           round(exp(coef(meth2_ethnic)["SmallDec", "c800Other than White"]), 2),
+                                           round(exp(confint(meth2_ethnic)["c800Other than White", "2.5 %",
+                                                                           "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_ethnic)["c800Other than White", "97.5 %",
+                                                                           "SmallDec"]), 2), 
+                                           round(p["SmallDec", "c800Other than White"], 3),
+                                           round(anova(meth2_age, meth2_ethnic)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Ethnicity (ref=White)", "Other than White", "BigDec", 
+                                           round(exp(coef(meth2_ethnic)["BigDec", "c800Other than White"]), 2),
+                                           round(exp(confint(meth2_ethnic)["c800Other than White", "2.5 %",
+                                                                           "BigDec"]), 2), 
+                                           round(exp(confint(meth2_ethnic)["c800Other than White", "97.5 %",
+                                                                           "BigDec"]), 2), 
+                                           round(p["BigDec", "c800Other than White"], 3),
+                                           round(anova(meth2_age, meth2_ethnic)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2))
+                       )
+
+results_meth2
+
 
 ## Maternal education
 
 # Descriptives
 table(data$belief_meth2, data$c645a)
 round(prop.table(table(data$belief_meth2, data$c645a), 1) * 100, 2)
+
+# And make stacked bar-plot of results
+(meth2_data_edu <- data %>%
+    filter(complete.cases(belief_meth2, c645a)) %>%
+    group_by(belief_meth2, c645a) %>%
+    summarise(n = n()))
+
+(meth2_edu_plot <- ggplot(meth2_data_edu, aes(fill = fct_rev(c645a), y = n, x = belief_meth2)) +
+    geom_bar(position = "fill", stat = "identity") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("NoChange" = "No change \n(n=5,000)", "SmallInc" = "Small increase \n(n=734)",
+                                "BigInc" = "Large increase \n(n=55)", "SmallDec" = "Small decrease \n(n=1,190)",
+                                "BigDec" = "Large decrease \n(n=104)")) +
+    labs(fill = "Educational attainment") +
+    theme(axis.text = element_text(size = 12), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth2_education_plot.pdf", height = 6, width = 10)
+plot(meth2_edu_plot)
+dev.off()
 
 # Model
 meth2_edu <- multinom(belief_meth2 ~ c645a + mz028b, data = data)
@@ -5653,14 +6409,185 @@ p
 exp(coef(meth2_edu))
 exp(confint(meth2_edu))
 
+# Compare to null age_only model
+meth2_age <- multinom(belief_meth2 ~ mz028b, data = data, subset = !is.na(c645a))
+anova(meth2_age, meth2_edu)
+
+# Add results to results dataframe
+results_meth2 <- rbind(results_meth2,
+                       setNames(data.frame("Education (ref=CSE/None)", "Vocational", "SmallInc", 
+                                           round(exp(coef(meth2_edu)["SmallInc", "c645aVocational"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aVocational", "2.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aVocational", "97.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(p["SmallInc", "c645aVocational"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "O level", "SmallInc", 
+                                           round(exp(coef(meth2_edu)["SmallInc", "c645aO level"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aO level", "2.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aO level", "97.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(p["SmallInc", "c645aO level"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "A level", "SmallInc", 
+                                           round(exp(coef(meth2_edu)["SmallInc", "c645aA level"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aA level", "2.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aA level", "97.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(p["SmallInc", "c645aA level"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "Degree", "SmallInc", 
+                                           round(exp(coef(meth2_edu)["SmallInc", "c645aDegree"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aDegree", "2.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aDegree", "97.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(p["SmallInc", "c645aDegree"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "Vocational", "BigInc", 
+                                           round(exp(coef(meth2_edu)["BigInc", "c645aVocational"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aVocational", "2.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aVocational", "97.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(p["BigInc", "c645aVocational"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "O level", "BigInc", 
+                                           round(exp(coef(meth2_edu)["BigInc", "c645aO level"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aO level", "2.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aO level", "97.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(p["BigInc", "c645aO level"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "A level", "BigInc", 
+                                           round(exp(coef(meth2_edu)["BigInc", "c645aA level"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aA level", "2.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aA level", "97.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(p["BigInc", "c645aA level"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "Degree", "BigInc", 
+                                           round(exp(coef(meth2_edu)["BigInc", "c645aDegree"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aDegree", "2.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aDegree", "97.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(p["BigInc", "c645aDegree"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "Vocational", "SmallDec", 
+                                           round(exp(coef(meth2_edu)["SmallDec", "c645aVocational"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aVocational", "2.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aVocational", "97.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(p["SmallDec", "c645aVocational"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "O level", "SmallDec", 
+                                           round(exp(coef(meth2_edu)["SmallDec", "c645aO level"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aO level", "2.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aO level", "97.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(p["SmallDec", "c645aO level"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "A level", "SmallDec", 
+                                           round(exp(coef(meth2_edu)["SmallDec", "c645aA level"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aA level", "2.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aA level", "97.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(p["SmallDec", "c645aA level"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "Degree", "SmallDec", 
+                                           round(exp(coef(meth2_edu)["SmallDec", "c645aDegree"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aDegree", "2.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aDegree", "97.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(p["SmallDec", "c645aDegree"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "Vocational", "BigDec", 
+                                           round(exp(coef(meth2_edu)["BigDec", "c645aVocational"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aVocational", "2.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aVocational", "97.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(p["BigDec", "c645aVocational"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "O level", "BigDec", 
+                                           round(exp(coef(meth2_edu)["BigDec", "c645aO level"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aO level", "2.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aO level", "97.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(p["BigDec", "c645aO level"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "A level", "BigDec", 
+                                           round(exp(coef(meth2_edu)["BigDec", "c645aA level"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aA level", "2.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aA level", "97.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(p["BigDec", "c645aA level"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Education (ref=CSE/None)", "Degree", "BigDec", 
+                                           round(exp(coef(meth2_edu)["BigDec", "c645aDegree"]), 2),
+                                           round(exp(confint(meth2_edu)["c645aDegree", "2.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(exp(confint(meth2_edu)["c645aDegree", "97.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(p["BigDec", "c645aDegree"], 3), 
+                                           round(anova(meth2_age, meth2_edu)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2))
+                       )
+
+results_meth2
+
 
 ## Household income
 
 # Descriptives
-data %>%
-  filter(complete.cases(belief_meth2, logavinceq)) %>%
-  group_by(belief_meth2) %>%
-  summarise(n = n(), mean = mean(logavinceq), sd = sd(logavinceq))
+(meth2_data_income <- data %>%
+    filter(complete.cases(belief_meth2, logavinceq)) %>%
+    group_by(belief_meth2) %>%
+    summarise(n = n(), mean = mean(logavinceq), sd = sd(logavinceq), se = sd/sqrt(n),
+              lower_ci = mean - (qt(0.975, df = n - 1) * se), upper_ci = mean + (qt(0.975, df = n - 1) * se)))
+
+# Make plot of results
+(meth2_income_plot <- ggplot(meth2_data_income) +
+    geom_point(aes(x = belief_meth2, y = mean), size = 6, shape = 18) +
+    geom_errorbar(aes(x = belief_meth2, ymin = lower_ci, ymax = upper_ci), width = 0.5, size = 1) +
+    ylab("Mean weekly household income (log GBP)") + xlab("Change in belief from pregnancy to age 9") +
+    ylim(5, 5.5) + theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("NoChange" = "No change \n(n=4,681)", "SmallInc" = "Small increase \n(n=684)",
+                                "BigInc" = "Large increase \n(n=52)", "SmallDec" = "Small decrease \n(n=1,131)",
+                                "BigDec" = "Large decrease \n(n=101)")) +
+    theme(axis.text = element_text(size = 14), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth2_income_plot.pdf", height = 6, width = 10)
+plot(meth2_income_plot)
+dev.off()
 
 # Model
 meth2_income <- multinom(belief_meth2 ~ logavinceq + mz028b, data = data)
@@ -5676,12 +6603,71 @@ p
 exp(coef(meth2_income))
 exp(confint(meth2_income))
 
+# Compare to null age_only model
+meth2_age <- multinom(belief_meth2 ~ mz028b, data = data, subset = !is.na(logavinceq))
+anova(meth2_age, meth2_income)
+
+# Add results to results dataframe
+results_meth2 <- rbind(results_meth2,
+                       setNames(data.frame("Income (log GBP)", "NA", "SmallInc", 
+                                           round(exp(coef(meth2_income)["SmallInc", "logavinceq"]), 2),
+                                           round(exp(confint(meth2_income)["logavinceq", "2.5 %", "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_income)["logavinceq", "97.5 %", "SmallInc"]), 2), 
+                                           round(p["SmallInc", "logavinceq"], 3), 
+                                           round(anova(meth2_age, meth2_income)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Income (log GBP)", "NA", "BigInc", 
+                                           round(exp(coef(meth2_income)["BigInc", "logavinceq"]), 2),
+                                           round(exp(confint(meth2_income)["logavinceq", "2.5 %", "BigInc"]), 2), 
+                                           round(exp(confint(meth2_income)["logavinceq", "97.5 %", "BigInc"]), 2), 
+                                           round(p["BigInc", "logavinceq"], 3),
+                                           round(anova(meth2_age, meth2_income)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Income (log GBP)", "NA", "SmallDec", 
+                                           round(exp(coef(meth2_income)["SmallDec", "logavinceq"]), 2),
+                                           round(exp(confint(meth2_income)["logavinceq", "2.5 %", "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_income)["logavinceq", "97.5 %", "SmallDec"]), 2), 
+                                           round(p["SmallDec", "logavinceq"], 3),
+                                           round(anova(meth2_age, meth2_income)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Income (log GBP)", "NA", "BigDec", 
+                                           round(exp(coef(meth2_income)["BigDec", "logavinceq"]), 2),
+                                           round(exp(confint(meth2_income)["logavinceq", "2.5 %", "BigDec"]), 2), 
+                                           round(exp(confint(meth2_income)["logavinceq", "97.5 %", "BigDec"]), 2), 
+                                           round(p["BigDec", "logavinceq"], 3),
+                                           round(anova(meth2_age, meth2_income)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2))
+                       )
+
+results_meth2
+
 
 ## Home ownership
 
 # Descriptives
 table(data$belief_meth2, data$a006)
 round(prop.table(table(data$belief_meth2, data$a006), 1) * 100, 2)
+
+# And make stacked bar-plot of results
+(meth2_data_home <- data %>%
+    filter(complete.cases(belief_meth2, a006)) %>%
+    group_by(belief_meth2, a006) %>%
+    summarise(n = n()))
+
+(meth2_home_plot <- ggplot(meth2_data_home, aes(fill = fct_rev(a006), y = n, x = belief_meth2)) +
+    geom_bar(position = "fill", stat = "identity") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("NoChange" = "No change \n(n=5,004)", "SmallInc" = "Small increase \n(n=738)",
+                                "BigInc" = "Large increase \n(n=55)", "SmallDec" = "Small decrease \n(n=1,185)",
+                                "BigDec" = "Large decrease \n(n=106)")) +
+    labs(fill = "Home Ownership Status") +
+    theme(axis.text = element_text(size = 12), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth2_homeOwnership_plot.pdf", height = 6, width = 10)
+plot(meth2_home_plot)
+dev.off()
 
 # Model
 meth2_home <- multinom(belief_meth2 ~ a006 + mz028b, data = data)
@@ -5697,12 +6683,151 @@ p
 exp(coef(meth2_home))
 exp(confint(meth2_home))
 
+# Compare to null age_only model
+meth2_age <- multinom(belief_meth2 ~ mz028b, data = data, subset = !is.na(a006))
+anova(meth2_age, meth2_home)
+
+# Add results to results dataframe
+results_meth2 <- rbind(results_meth2,
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Rented", "SmallInc", 
+                                           round(exp(coef(meth2_home)["SmallInc", "a006Rented"]), 2),
+                                           round(exp(confint(meth2_home)["a006Rented", "2.5 %", 
+                                                                         "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_home)["a006Rented", "97.5 %", 
+                                                                         "SmallInc"]), 2), 
+                                           round(p["SmallInc", "a006Rented"], 3), 
+                                           round(anova(meth2_age, meth2_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Council/HA", "SmallInc", 
+                                           round(exp(coef(meth2_home)["SmallInc", "a006Council/HA"]), 2),
+                                           round(exp(confint(meth2_home)["a006Council/HA", "2.5 %", 
+                                                                         "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_home)["a006Council/HA", "97.5 %", 
+                                                                         "SmallInc"]), 2), 
+                                           round(p["SmallInc", "a006Council/HA"], 3), 
+                                           round(anova(meth2_age, meth2_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Other", "SmallInc", 
+                                           round(exp(coef(meth2_home)["SmallInc", "a006Other"]), 2),
+                                           round(exp(confint(meth2_home)["a006Other", "2.5 %", 
+                                                                         "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_home)["a006Other", "97.5 %", 
+                                                                         "SmallInc"]), 2), 
+                                           round(p["SmallInc", "a006Other"], 3), 
+                                           round(anova(meth2_age, meth2_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Rented", "BigInc", 
+                                           round(exp(coef(meth2_home)["BigInc", "a006Rented"]), 2),
+                                           round(exp(confint(meth2_home)["a006Rented", "2.5 %", 
+                                                                         "BigInc"]), 2), 
+                                           round(exp(confint(meth2_home)["a006Rented", "97.5 %", 
+                                                                         "BigInc"]), 2), 
+                                           round(p["BigInc", "a006Rented"], 3), 
+                                           round(anova(meth2_age, meth2_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Council/HA", "BigInc", 
+                                           round(exp(coef(meth2_home)["BigInc", "a006Council/HA"]), 2),
+                                           round(exp(confint(meth2_home)["a006Council/HA", "2.5 %", 
+                                                                         "BigInc"]), 2), 
+                                           round(exp(confint(meth2_home)["a006Council/HA", "97.5 %", 
+                                                                         "BigInc"]), 2), 
+                                           round(p["BigInc", "a006Council/HA"], 3), 
+                                           round(anova(meth2_age, meth2_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Other", "BigInc", 
+                                           round(exp(coef(meth2_home)["BigInc", "a006Other"]), 2),
+                                           round(exp(confint(meth2_home)["a006Other", "2.5 %", 
+                                                                         "BigInc"]), 2), 
+                                           round(exp(confint(meth2_home)["a006Other", "97.5 %", 
+                                                                         "BigInc"]), 2), 
+                                           round(p["BigInc", "a006Other"], 3), 
+                                           round(anova(meth2_age, meth2_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Rented", "SmallDec", 
+                                           round(exp(coef(meth2_home)["SmallDec", "a006Rented"]), 2),
+                                           round(exp(confint(meth2_home)["a006Rented", "2.5 %", 
+                                                                         "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_home)["a006Rented", "97.5 %", 
+                                                                         "SmallDec"]), 2), 
+                                           round(p["SmallDec", "a006Rented"], 3), 
+                                           round(anova(meth2_age, meth2_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Council/HA", "SmallDec", 
+                                           round(exp(coef(meth2_home)["SmallDec", "a006Council/HA"]), 2),
+                                           round(exp(confint(meth2_home)["a006Council/HA", "2.5 %", 
+                                                                         "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_home)["a006Council/HA", "97.5 %", 
+                                                                         "SmallDec"]), 2), 
+                                           round(p["SmallDec", "a006Council/HA"], 3), 
+                                           round(anova(meth2_age, meth2_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Other", "SmallDec", 
+                                           round(exp(coef(meth2_home)["SmallDec", "a006Other"]), 2),
+                                           round(exp(confint(meth2_home)["a006Other", "2.5 %", 
+                                                                         "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_home)["a006Other", "97.5 %", 
+                                                                         "SmallDec"]), 2), 
+                                           round(p["SmallDec", "a006Other"], 3), 
+                                           round(anova(meth2_age, meth2_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Rented", "BigDec", 
+                                           round(exp(coef(meth2_home)["BigDec", "a006Rented"]), 2),
+                                           round(exp(confint(meth2_home)["a006Rented", "2.5 %", 
+                                                                         "BigDec"]), 2), 
+                                           round(exp(confint(meth2_home)["a006Rented", "97.5 %", 
+                                                                         "BigDec"]), 2), 
+                                           round(p["BigDec", "a006Rented"], 3), 
+                                           round(anova(meth2_age, meth2_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Council/HA", "BigDec", 
+                                           round(exp(coef(meth2_home)["BigDec", "a006Council/HA"]), 2),
+                                           round(exp(confint(meth2_home)["a006Council/HA", "2.5 %", 
+                                                                         "BigDec"]), 2), 
+                                           round(exp(confint(meth2_home)["a006Council/HA", "97.5 %", 
+                                                                         "BigDec"]), 2), 
+                                           round(p["BigDec", "a006Council/HA"], 3), 
+                                           round(anova(meth2_age, meth2_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("Home Ownership (ref=Owned/Mortgaged)", "Other", "BigDec", 
+                                           round(exp(coef(meth2_home)["BigDec", "a006Other"]), 2),
+                                           round(exp(confint(meth2_home)["a006Other", "2.5 %", 
+                                                                         "BigDec"]), 2), 
+                                           round(exp(confint(meth2_home)["a006Other", "97.5 %", 
+                                                                         "BigDec"]), 2), 
+                                           round(p["BigDec", "a006Other"], 3), 
+                                           round(anova(meth2_age, meth2_home)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2))
+                       )
+
+results_meth2
+
 
 ## IMD
 
 # Descriptives
 table(data$belief_meth2, data$dimd2010q5)
 round(prop.table(table(data$belief_meth2, data$dimd2010q5), 1) * 100, 2)
+
+# And make stacked bar-plot of results
+(meth2_data_imd <- data %>%
+    filter(complete.cases(belief_meth2, dimd2010q5)) %>%
+    group_by(belief_meth2, dimd2010q5) %>%
+    summarise(n = n()))
+
+(meth2_imd_plot <- ggplot(meth2_data_imd, aes(fill = fct_rev(dimd2010q5), y = n, x = belief_meth2)) +
+    geom_bar(position = "fill", stat = "identity") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("NoChange" = "No change \n(n=4,674)", "SmallInc" = "Small increase \n(n=698)",
+                                "BigInc" = "Large increase \n(n=53)", "SmallDec" = "Small decrease \n(n=1,126)",
+                                "BigDec" = "Large decrease \n(n=100)")) +
+    labs(fill = "IMD Quintile") +
+    theme(axis.text = element_text(size = 12), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth2_IMD_plot.pdf", height = 6, width = 10)
+plot(meth2_imd_plot)
+dev.off()
 
 # Model
 meth2_imd <- multinom(belief_meth2 ~ dimd2010q5 + mz028b, data = data)
@@ -5718,12 +6843,187 @@ p
 exp(coef(meth2_imd))
 exp(confint(meth2_imd))
 
+# Compare to null age_only model
+meth2_age <- multinom(belief_meth2 ~ mz028b, data = data, subset = !is.na(dimd2010q5))
+anova(meth2_age, meth2_imd)
+
+# Add results to results dataframe
+results_meth2 <- rbind(results_meth2,
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 2", "SmallInc", 
+                                           round(exp(coef(meth2_imd)["SmallInc", "dimd2010q5Quintile 2"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 2", "2.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 2", "97.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(p["SmallInc", "dimd2010q5Quintile 2"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 3", "SmallInc", 
+                                           round(exp(coef(meth2_imd)["SmallInc", "dimd2010q5Quintile 3"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 3", "2.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 3", "97.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(p["SmallInc", "dimd2010q5Quintile 3"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 4", "SmallInc", 
+                                           round(exp(coef(meth2_imd)["SmallInc", "dimd2010q5Quintile 4"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 4", "2.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 4", "97.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(p["SmallInc", "dimd2010q5Quintile 4"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quin. 5/Most dep.", "SmallInc", 
+                                           round(exp(coef(meth2_imd)["SmallInc", "dimd2010q5Quin. 5/Most deprived"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quin. 5/Most deprived", "2.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quin. 5/Most deprived", "97.5 %", 
+                                                                        "SmallInc"]), 2), 
+                                           round(p["SmallInc", "dimd2010q5Quin. 5/Most deprived"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 2", "BigInc", 
+                                           round(exp(coef(meth2_imd)["BigInc", "dimd2010q5Quintile 2"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 2", "2.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 2", "97.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(p["BigInc", "dimd2010q5Quintile 2"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 3", "BigInc", 
+                                           round(exp(coef(meth2_imd)["BigInc", "dimd2010q5Quintile 3"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 3", "2.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 3", "97.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(p["BigInc", "dimd2010q5Quintile 3"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 4", "BigInc", 
+                                           round(exp(coef(meth2_imd)["BigInc", "dimd2010q5Quintile 4"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 4", "2.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 4", "97.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(p["BigInc", "dimd2010q5Quintile 4"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quin. 5/Most dep.", "BigInc", 
+                                           round(exp(coef(meth2_imd)["BigInc", "dimd2010q5Quin. 5/Most deprived"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quin. 5/Most deprived", "2.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quin. 5/Most deprived", "97.5 %", 
+                                                                        "BigInc"]), 2), 
+                                           round(p["BigInc", "dimd2010q5Quin. 5/Most deprived"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 2", "SmallDec", 
+                                           round(exp(coef(meth2_imd)["SmallDec", "dimd2010q5Quintile 2"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 2", "2.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 2", "97.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(p["SmallDec", "dimd2010q5Quintile 2"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 3", "SmallDec", 
+                                           round(exp(coef(meth2_imd)["SmallDec", "dimd2010q5Quintile 3"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 3", "2.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 3", "97.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(p["SmallDec", "dimd2010q5Quintile 3"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 4", "SmallDec", 
+                                           round(exp(coef(meth2_imd)["SmallDec", "dimd2010q5Quintile 4"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 4", "2.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 4", "97.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(p["SmallDec", "dimd2010q5Quintile 4"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quin. 5/Most dep.", "SmallDec", 
+                                           round(exp(coef(meth2_imd)["SmallDec", "dimd2010q5Quin. 5/Most deprived"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quin. 5/Most deprived", "2.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quin. 5/Most deprived", "97.5 %", 
+                                                                        "SmallDec"]), 2), 
+                                           round(p["SmallDec", "dimd2010q5Quin. 5/Most deprived"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 2", "BigDec", 
+                                           round(exp(coef(meth2_imd)["BigDec", "dimd2010q5Quintile 2"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 2", "2.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 2", "97.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(p["BigDec", "dimd2010q5Quintile 2"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 3", "BigDec", 
+                                           round(exp(coef(meth2_imd)["BigDec", "dimd2010q5Quintile 3"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 3", "2.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 3", "97.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(p["BigDec", "dimd2010q5Quintile 3"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quintile 4", "BigDec", 
+                                           round(exp(coef(meth2_imd)["BigDec", "dimd2010q5Quintile 4"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 4", "2.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quintile 4", "97.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(p["BigDec", "dimd2010q5Quintile 4"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("IMD (ref=Quin. 1/Least deprived)", "Quin. 5/Most dep.", "BigDec", 
+                                           round(exp(coef(meth2_imd)["BigDec", "dimd2010q5Quin. 5/Most deprived"]), 2),
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quin. 5/Most deprived", "2.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(exp(confint(meth2_imd)["dimd2010q5Quin. 5/Most deprived", "97.5 %", 
+                                                                        "BigDec"]), 2), 
+                                           round(p["BigDec", "dimd2010q5Quin. 5/Most deprived"], 3), 
+                                           round(anova(meth2_age, meth2_imd)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2))
+                       )
+
+results_meth2
+
 
 ## First-time mum
 
 # Descriptives
 table(data$belief_meth2, data$b032)
 round(prop.table(table(data$belief_meth2, data$b032), 1) * 100, 2)
+
+# And make stacked bar-plot of results
+(meth2_data_firstMum <- data %>%
+    filter(complete.cases(belief_meth2, b032)) %>%
+    group_by(belief_meth2, b032) %>%
+    summarise(n = n()))
+
+(meth2_firstMum_plot <- ggplot(meth2_data_firstMum, aes(fill = fct_rev(b032), y = n, x = belief_meth2)) +
+    geom_bar(position = "fill", stat = "identity") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("NoChange" = "No change \n(n=4,984)", "SmallInc" = "Small increase \n(n=735)",
+                                "BigInc" = "Large increase \n(n=55)", "SmallDec" = "Small decrease \n(n=1,172)",
+                                "BigDec" = "Large decrease \n(n=107)")) +
+    labs(fill = "First-time Mother") +
+    theme(axis.text = element_text(size = 12), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth2_firstMum_plot.pdf", height = 6, width = 10)
+plot(meth2_firstMum_plot)
+dev.off()
 
 # Model
 meth2_firstMum <- multinom(belief_meth2 ~ b032 + mz028b, data = data)
@@ -5739,5 +7039,53 @@ p
 exp(coef(meth2_firstMum))
 exp(confint(meth2_firstMum))
 
+# Compare to null age_only model
+meth2_age <- multinom(belief_meth2 ~ mz028b, data = data, subset = !is.na(b032))
+anova(meth2_age, meth2_firstMum)
 
-### IDEALLY WANT TO PUT THIS INTO A NICE TABLE OF ALL THE RESULTS
+# Add results to results dataframe
+results_meth2 <- rbind(results_meth2,
+                       setNames(data.frame("First-time Mother (ref=No)", "New Mother", "SmallInc", 
+                                           round(exp(coef(meth2_firstMum)["SmallInc", "b032NewMum"]), 2),
+                                           round(exp(confint(meth2_firstMum)["b032NewMum", "2.5 %", 
+                                                                             "SmallInc"]), 2), 
+                                           round(exp(confint(meth2_firstMum)["b032NewMum", "97.5 %", 
+                                                                             "SmallInc"]), 2), 
+                                           round(p["SmallInc", "b032NewMum"], 3), 
+                                           round(anova(meth2_age, meth2_firstMum)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("First-time Mother (ref=No)", "New Mother", "BigInc", 
+                                           round(exp(coef(meth2_firstMum)["BigInc", "b032NewMum"]), 2),
+                                           round(exp(confint(meth2_firstMum)["b032NewMum", "2.5 %", 
+                                                                             "BigInc"]), 2), 
+                                           round(exp(confint(meth2_firstMum)["b032NewMum", "97.5 %", 
+                                                                             "BigInc"]), 2), 
+                                           round(p["BigInc", "b032NewMum"], 3),
+                                           round(anova(meth2_age, meth2_firstMum)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("First-time Mother (ref=No)", "New Mother", "SmallDec", 
+                                           round(exp(coef(meth2_firstMum)["SmallDec", "b032NewMum"]), 2),
+                                           round(exp(confint(meth2_firstMum)["b032NewMum", "2.5 %",
+                                                                             "SmallDec"]), 2), 
+                                           round(exp(confint(meth2_firstMum)["b032NewMum", "97.5 %",
+                                                                             "SmallDec"]), 2), 
+                                           round(p["SmallDec", "b032NewMum"], 3),
+                                           round(anova(meth2_age, meth2_firstMum)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2)),
+                       setNames(data.frame("First-time Mother (ref=No)", "New Mother", "BigDec", 
+                                           round(exp(coef(meth2_firstMum)["BigDec", "b032NewMum"]), 2),
+                                           round(exp(confint(meth2_firstMum)["b032NewMum", "2.5 %",
+                                                                             "BigDec"]), 2), 
+                                           round(exp(confint(meth2_firstMum)["b032NewMum", "97.5 %",
+                                                                             "BigDec"]), 2), 
+                                           round(p["BigDec", "b032NewMum"], 3),
+                                           round(anova(meth2_age, meth2_firstMum)[2, "Pr(Chi)"], 3)), 
+                                names(results_meth2))
+                       )
+
+results_meth2
+
+
+## Save this results table
+write_csv(results_meth2, "./Results/results_meth2.csv")
+
