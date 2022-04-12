@@ -18,6 +18,8 @@ library(tidyverse)
 #install.packages("ggalluvial")
 library(ggalluvial)
 
+library(nnet)
+
 
 
 ###########################################################################################
@@ -257,7 +259,7 @@ summary(tab_age28)
 
 ## Does appear to be a slight drop in religious belief between pregnancy and age 5, then is stable from age 5 to 9, and then drops again between age 9 and age 28; the 'not sure' group stays approximately the same, while the 'no' group increases. Most of the transitions are between adjacent groups (i.e., from 'yes' to 'not sure', rather than 'yes' to 'no'), although in general large shifts are more likely to be from 'yes' to 'no', rather than from 'no' to 'yes'.
 
-# Sample sizes do decrease quite substantially from age 9 to age 28 - from 6,615 with data at preg, age 5 and age 9, to just 3,682 with data at preg, age 5, age 9 and age 28.
+# Sample sizes do decrease quite substantially from age 9 to age 28 - from ~6,600 with data at preg, age 5 and age 9, to just ~3,600 with data at preg, age 5, age 9 and age 28.
 sum(data_temp_age9$freq)
 sum(data_temp_age28$freq)
 
@@ -2218,7 +2220,7 @@ data <- data %>%
   mutate(p4044 = na_if(p4044, "Triplet / quadruplet")) %>%
   mutate(p4044_splitXian = recode(p4044, "Buddhist" = "Other", "Hindu" = "Other", "Jewish" = "Other", 
                                   "Muslim" = "Other", "Rastafarian" = "Other", "Sikh" = "Other")) %>%
-  mutate(p4044_splitXian = recode(p4044_splitXian, "Christian Science" = "OTher Christian", 
+  mutate(p4044_splitXian = recode(p4044_splitXian, "Christian Science" = "Other Christian", 
                                 "Jehovah's Witness" = "Other Christian", "Mormon" = "Other Christian", 
                                 "Methodist, Baptist or other Christian" = "Other Christian")) %>%
   mutate(p4044_splitXian = factor(p4044_splitXian, levels = c("Church of England", "Roman Catholic", 
@@ -2658,7 +2660,7 @@ sum(data_temp_age28_p$freq)
 
 
 #####################################################################################################
-#### Length of time had particulat faith - Responses: All life vs > 5 years vs < 5 years
+#### Length of time had particular faith - Responses: All life vs > 5 years vs < 5 years
 
 ### Mothers
 
@@ -3446,9 +3448,18 @@ table(data$l7040[is.na(data$l7049_grp)])
 
 # See how the people who answered 'only for special occasions' responded to the 'belief in God/divine power' question, and religious attendance from the previous questionnaires
 table(data$l7049, useNA = "ifany")
+
 table(data$l7040[data$l7049 == "Only for special occasions"])
+prop.table(table(data$l7040[data$l7049 == "Only for special occasions"])) * 100
+prop.table(table(data$l7040)) * 100
+
 table(data$d816[data$l7049 == "Only for special occasions"])
+prop.table(table(data$d816[data$l7049 == "Only for special occasions"])) * 100
+prop.table(table(data$d816)) * 100
+
 table(data$k6247[data$l7049 == "Only for special occasions"])
+prop.table(table(data$k6247[data$l7049 == "Only for special occasions"])) * 100
+prop.table(table(data$k6247)) * 100
 
 ## Age 9
 table(data$p4049, useNA = "ifany")
@@ -3457,6 +3468,7 @@ table(data$p4049, useNA = "ifany")
 data <- data %>%
   mutate(p4049 = na_if(p4049, "No response")) %>%
   mutate(p4049 = na_if(p4049, "Not completed")) %>%
+  mutate(p4049 = na_if(p4049, "Text response")) %>%
   mutate(p4049 = na_if(p4049, "Triplet / quadruplet")) %>%
   mutate(p4049_grp = recode(p4049, "Yes, at least once a month" = "Regular", "Yes, at least once a week" = "Regular", 
                             "Yes, at least once a year" = "Occasional/None", "No, not at all" = "Occasional/None")) %>%
@@ -3490,10 +3502,24 @@ table(data$Y3000[is.na(data$Y3080_grp)])
 # See how the people who answered 'Occasionally' responded to the 'belief in God/divine power' question, and religious attendance from the previous questionnaires
 table(data$Y3080, useNA = "ifany")
 table(data$Y3000[data$Y3080 == "Occasionally"])
+prop.table(table(data$Y3000[data$Y3080 == "Occasionally"])) * 100
+prop.table(table(data$Y3000)) * 100
+
 table(data$d816[data$Y3080 == "Occasionally"])
+prop.table(table(data$d816[data$Y3080 == "Occasionally"])) * 100
+prop.table(table(data$d816)) * 100
+
 table(data$k6247[data$Y3080 == "Occasionally"])
+prop.table(table(data$k6247[data$Y3080 == "Occasionally"])) * 100
+prop.table(table(data$k6247)) * 100
+
 table(data$l7049[data$Y3080 == "Occasionally"])
+prop.table(table(data$l7049[data$Y3080 == "Occasionally"])) * 100
+prop.table(table(data$l7049)) * 100
+
 table(data$p4049[data$Y3080 == "Occasionally"])
+prop.table(table(data$p4049[data$Y3080 == "Occasionally"])) * 100
+prop.table(table(data$p4049)) * 100
 
 
 ## Turn this data into a sankey plot - Both for pregnancy to 2019, and just from pregnancy to age 9 (as less missing data)
@@ -3704,9 +3730,18 @@ table(data$pj7040[is.na(data$pj7049_grp)])
 
 # See how the people who answered 'only for special occasions' responded to the 'belief in God/divine power' question, and religious attendance from the previous questionnaires
 table(data$pj7049, useNA = "ifany")
+
 table(data$pj7040[data$pj7049 == "Only for special occasions"])
+prop.table(table(data$pj7040[data$pj7049 == "Only for special occasions"])) * 100
+prop.table(table(data$pj7040)) * 100
+
 table(data$pb155[data$pj7049 == "Only for special occasions"])
+prop.table(table(data$pb155[data$pj7049 == "Only for special occasions"])) * 100
+prop.table(table(data$pb155)) * 100
+
 table(data$ph6247[data$pj7049 == "Only for special occasions"])
+prop.table(table(data$ph6247[data$pj7049 == "Only for special occasions"])) * 100
+prop.table(table(data$ph6247)) * 100
 
 ## Age 9
 table(data$pm4049, useNA = "ifany")
@@ -3748,11 +3783,26 @@ table(data$FC3000[is.na(data$FC3080_grp)])
 
 # See how the people who answered 'Occasionally' responded to the 'belief in God/divine power' question, and religious attendance from the previous questionnaires
 table(data$FC3080, useNA = "ifany")
+
 table(data$FC3000[data$FC3080 == "Occasionally"])
+prop.table(table(data$FC3000[data$FC3080 == "Occasionally"])) * 100
+prop.table(table(data$FC3000)) * 100
+
 table(data$pb155[data$FC3080 == "Occasionally"])
+prop.table(table(data$pb155[data$FC3080 == "Occasionally"])) * 100
+prop.table(table(data$pb155)) * 100
+
 table(data$ph6247[data$FC3080 == "Occasionally"])
+prop.table(table(data$ph6247[data$FC3080 == "Occasionally"])) * 100
+prop.table(table(data$ph6247)) * 100
+
 table(data$pj7049[data$FC3080 == "Occasionally"])
+prop.table(table(data$pj7049[data$FC3080 == "Occasionally"])) * 100
+prop.table(table(data$pj7049)) * 100
+
 table(data$pm4049[data$FC3080 == "Occasionally"])
+prop.table(table(data$pm4049[data$FC3080 == "Occasionally"])) * 100
+prop.table(table(data$pm4049)) * 100
 
 
 ## Turn this data into a sankey plot - Both for pregnancy to 2019, and just from pregnancy to age 9 (as less missing data)
@@ -3973,7 +4023,16 @@ table(data$Y3090, useNA = "ifany")
 
 # This questionnaire had a 'not applicable' response for this question (unlike previous waves) - Will see if sensible to combine with 'no' (if not believe in God/no religious affiliation), for consistency across time-points. Hmmmm...Even though most said 'no belief/no affiliation', are actually quite a few people who believe in God or have a religious affiliation who said 'N/A' to this question. Despite this, will still code these 'N/A's as 'no', is if they did obtain help/support then presumably they would have said 'yes'.
 table(data$Y3000[data$Y3090 == "Not applicable"])
+prop.table(table(data$Y3000[data$Y3090 == "Not applicable"])) * 100
+prop.table(table(data$Y3000)) * 100
+
 table(data$Y3040_grpXian[data$Y3090 == "Not applicable"])
+prop.table(table(data$Y3040_grpXian[data$Y3090 == "Not applicable"])) * 100
+prop.table(table(data$Y3040_grpXian)) * 100
+
+table(data$p4050[data$Y3090 == "Not applicable"])
+prop.table(table(data$p4050[data$Y3090 == "Not applicable"])) * 100
+prop.table(table(data$p4050)) * 100
 
 # If missing, code as NA, then convert to factor and order levels
 data <- data %>%
@@ -4203,7 +4262,16 @@ table(data$FC3090, useNA = "ifany")
 
 # This questionnaire had a 'not applicable' response for this question (unlike previous waves) - Will see if sensible to combine with 'no' (if not believe in God/no religious affiliation), for consistency across time-points. Hmmmm...Even though most said 'no belief/no affiliation', are actually quite a few people who believe in God or have a religious affiliation who said 'N/A' to this question. Despite this, will still code these 'N/A's as 'no', is if they did obtain help/support then presumably they would have said 'yes'.
 table(data$FC3000[data$FC3090 == "Not applicable"])
+prop.table(table(data$FC3000[data$FC3090 == "Not applicable"])) * 100
+prop.table(table(data$FC3000)) * 100
+
 table(data$FC3040_grpXian[data$FC3090 == "Not applicable"])
+prop.table(table(data$FC3040_grpXian[data$FC3090 == "Not applicable"])) * 100
+prop.table(table(data$FC3040_grpXian)) * 100
+
+table(data$pm4050[data$FC3090 == "Not applicable"])
+prop.table(table(data$pm4050[data$FC3090 == "Not applicable"])) * 100
+prop.table(table(data$pm4050)) * 100
 
 # If missing, code as NA, then convert to factor and order levels
 data <- data %>%
@@ -4439,7 +4507,16 @@ table(data$Y3091, useNA = "ifany")
 
 # This questionnaire had a 'not applicable' response for this question (unlike previous waves) - Will see if sensible to combine with 'no' (if not believe in God/no religious affiliation), for consistency across time-points. Hmmmm...Even though most said 'no belief/no affiliation', are actually quite a few people who believe in God or have a religious affiliation who said 'N/A' to this question. Despite this, will still code these 'N/A's as 'no', is if they did obtain help/support then presumably they would have said 'yes'.
 table(data$Y3000[data$Y3091 == "Not applicable"])
+prop.table(table(data$Y3000[data$Y3091 == "Not applicable"])) * 100
+prop.table(table(data$Y3000)) * 100
+
 table(data$Y3040_grpXian[data$Y3091 == "Not applicable"])
+prop.table(table(data$Y3040_grpXian[data$Y3091 == "Not applicable"])) * 100
+prop.table(table(data$Y3040_grpXian)) * 100
+
+table(data$p4051[data$Y3091 == "Not applicable"])
+prop.table(table(data$p4051[data$Y3091 == "Not applicable"])) * 100
+prop.table(table(data$p4051)) * 100
 
 # If missing, code as NA, then convert to factor and order levels
 data <- data %>%
@@ -4669,7 +4746,16 @@ table(data$FC3091, useNA = "ifany")
 
 # This questionnaire had a 'not applicable' response for this question (unlike previous waves) - Will see if sensible to combine with 'no' (if not believe in God/no religious affiliation), for consistency across time-points. Hmmmm...Even though most said 'no belief/no affiliation', are actually quite a few people who believe in God or have a religious affiliation who said 'N/A' to this question. Despite this, will still code these 'N/A's as 'no', is if they did obtain help/support then presumably they would have said 'yes'.
 table(data$FC3000[data$FC3091 == "Not applicable"])
+prop.table(table(data$FC3000[data$FC3091 == "Not applicable"])) * 100
+prop.table(table(data$FC3000)) * 100
+
 table(data$FC3040_grpXian[data$FC3091 == "Not applicable"])
+prop.table(table(data$FC3040_grpXian[data$FC3091 == "Not applicable"])) * 100
+prop.table(table(data$FC3040_grpXian)) * 100
+
+table(data$pm4051[data$FC3091 == "Not applicable"])
+prop.table(table(data$pm4051[data$FC3091 == "Not applicable"])) * 100
+prop.table(table(data$pm4051)) * 100
 
 # If missing, code as NA, then convert to factor and order levels
 data <- data %>%
@@ -5326,6 +5412,7 @@ data <- data %>%
   mutate(belief_meth1 = factor(belief_meth1, levels = c("ConsNonBel", "ConsBel", "NewBel", "NewNonBel")))
 
 table(data$belief_meth1)
+prop.table(table(data$belief_meth1)) * 100
 
 # Coding as second method
 data <- data %>%
@@ -5341,6 +5428,7 @@ data <- data %>%
   mutate(belief_meth2 = factor(belief_meth2, levels = c("NoChange", "SmallInc", "BigInc", "SmallDec", "BigDec")))
 
 table(data$belief_meth2)
+prop.table(table(data$belief_meth2)) * 100
 
 
 ## Tidy the covariates
@@ -5380,7 +5468,7 @@ data <- data %>%
 
 table(data$c645a, useNA = "ifany")
 
-# Household income (log GDP per week)
+# Household income (log GBP per week)
 data <- data %>%
   mutate(logavinceq = as.numeric(logavinceq))
 
@@ -5429,7 +5517,6 @@ table(data$b032, useNA = "ifany")
 
 
 #### Now conduct multinomial regression for each method and for each covariate (all with adjust for age, other than the age-only model). Will calculate p-values using Wald/z-tests (for simple guide to multinomial regression in R, see: https://stats.oarc.ucla.edu/r/dae/multinomial-logistic-regression/)
-library(nnet)
 
 ## Initialise a dataframe to save results to
 results_meth1 <- data.frame(exposure = character(), exp_level = character(), outcome_level = character(),
@@ -6356,6 +6443,25 @@ pdf("./Results/meth2_ethnicity_plot.pdf", height = 6, width = 10)
 plot(meth2_eth_plot)
 dev.off()
 
+# As some low cell counts (<5), will drop the 'large increase' and 'large decrease' columns from the plot
+(meth2_data_eth_noSmallCells <- meth2_data_eth %>%
+    filter(belief_meth2 != "BigInc" & belief_meth2 != "BigDec"))
+
+(meth2_eth_plot_noSmallCells <- ggplot(meth2_data_eth_noSmallCells, aes(fill = fct_rev(c800), y = n, x = belief_meth2)) +
+    geom_bar(position = "fill", stat = "identity") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("NoChange" = "No change \n(n=4,986)", "SmallInc" = "Small increase \n(n=729)",
+                                "BigInc" = "Large increase \n(n=56)", "SmallDec" = "Small decrease \n(n=1,190)",
+                                "BigDec" = "Large decrease \n(n=103)")) +
+    labs(fill = "Ethnicity") +
+    theme(axis.text = element_text(size = 12), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth2_ethnicity_plot_noSmallCells.pdf", height = 6, width = 10)
+plot(meth2_eth_plot_noSmallCells)
+dev.off()
+
 # Model
 meth2_ethnic <- multinom(belief_meth2 ~ c800 + mz028b, data = data)
 summary(meth2_ethnic)
@@ -6740,6 +6846,25 @@ round(prop.table(table(data$belief_meth2, data$a006), 1) * 100, 2)
 # Save this plot
 pdf("./Results/meth2_homeOwnership_plot.pdf", height = 6, width = 10)
 plot(meth2_home_plot)
+dev.off()
+
+# Drop large increase and decrease due to cell counts < 5
+(meth2_data_home_NoSmallCells <- meth2_data_home %>%
+  filter(belief_meth2 != "BigInc" & belief_meth2 != "BigDec"))
+
+(meth2_home_plot_NosmallCells <- ggplot(meth2_data_home_NoSmallCells, aes(fill = fct_rev(a006), y = n, x = belief_meth2)) +
+    geom_bar(position = "fill", stat = "identity") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+    scale_x_discrete(labels = c("NoChange" = "No change \n(n=5,004)", "SmallInc" = "Small increase \n(n=738)",
+                                "BigInc" = "Large increase \n(n=55)", "SmallDec" = "Small decrease \n(n=1,185)",
+                                "BigDec" = "Large decrease \n(n=106)")) +
+    labs(fill = "Home Ownership Status") +
+    theme(axis.text = element_text(size = 12), axis.title = element_text(size = 16)))
+
+# Save this plot
+pdf("./Results/meth2_homeOwnership_plot_NoSmallCells.pdf", height = 6, width = 10)
+plot(meth2_home_plot_NosmallCells)
 dev.off()
 
 # Model
