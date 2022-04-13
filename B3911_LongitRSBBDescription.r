@@ -263,6 +263,16 @@ summary(tab_age28)
 sum(data_temp_age9$freq)
 sum(data_temp_age28$freq)
 
+## Quick check for potential selection bias, to see whether proportion of religious belief differs from whole sample in pregnancy to selected sample with just complete-case data at all time-points
+table(data$d810)
+prop.table(table(data$d810)) * 100
+
+table(tab_age28$preg)
+prop.table(table(tab_age28$preg)) * 100
+
+table(tab_age9$preg)
+prop.table(table(tab_age9$preg)) * 100
+
 
 ### Now repeat for partners
 
