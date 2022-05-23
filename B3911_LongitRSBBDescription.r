@@ -127,6 +127,7 @@ data_temp_age9 <- data %>%
   rename(preg = d810, age5 = k6240, age9 = p4040) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9)
@@ -192,6 +193,8 @@ data_temp_age28 <- data %>%
   rename(preg = d810, age5 = k6240, age9 = p4040, age28 = Y3000) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28)
@@ -348,6 +351,7 @@ data_temp_age9_p <- data %>%
   rename(preg = pb150, age5 = ph6240, age9 = pm4040) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9_p)
@@ -413,6 +417,8 @@ data_temp_age28_p <- data %>%
   rename(preg = pb150, age5 = ph6240, age9 = pm4040, age28 = FC3000) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28_p)
@@ -575,6 +581,7 @@ data_temp_age9 <- data %>%
   rename(preg = d811, age5 = k6241, age9 = p4041) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9)
@@ -640,6 +647,8 @@ data_temp_age28 <- data %>%
   rename(preg = d811, age5 = k6241, age9 = p4041, age28 = Y3010) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28)
@@ -800,6 +809,7 @@ data_temp_age9_p <- data %>%
   rename(preg = pb151, age5 = ph6241, age9 = pm4041) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9_p)
@@ -865,6 +875,8 @@ data_temp_age28_p <- data %>%
   rename(preg = pb151, age5 = ph6241, age9 = pm4041, age28 = FC3010) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28_p)
@@ -1027,6 +1039,7 @@ data_temp_age9 <- data %>%
   rename(preg = d812, age5 = k6242, age9 = p4042) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9)
@@ -1092,6 +1105,8 @@ data_temp_age28 <- data %>%
   rename(preg = d812, age5 = k6242, age9 = p4042, age28 = Y3020) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28)
@@ -1251,6 +1266,7 @@ data_temp_age9_p <- data %>%
   rename(preg = pb152, age5 = ph6242, age9 = pm4042) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9_p)
@@ -1316,6 +1332,8 @@ data_temp_age28_p <- data %>%
   rename(preg = pb152, age5 = ph6242, age9 = pm4042, age28 = FC3020) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28_p)
@@ -1457,6 +1475,7 @@ data_temp_age28 <- data %>%
   rename(age6 = l7043, age9 = p4043, age28 = Y3030) %>%
   filter(complete.cases(age6, age9, age28)) %>%
   group_by(age6, age9, age28) %>%
+  rename("6 years post-partum" = age6, "9 years post-partum" = age9, "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28)
@@ -1580,6 +1599,7 @@ data_temp_age28_p <- data %>%
   rename(age6 = pj7043, age9 = pm4043, age28 = FC3030) %>%
   filter(complete.cases(age6, age9, age28)) %>%
   group_by(age6, age9, age28) %>%
+  rename("6 years post-partum" = age6, "9 years post-partum" = age9, "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28_p)
@@ -1762,6 +1782,7 @@ data_temp_age9 <- data %>%
   rename(preg = d813_grpXian, age5 = k6243_grpXian, age9 = p4044_grpXian) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9)
@@ -1827,6 +1848,8 @@ data_temp_age28 <- data %>%
   rename(preg = d813_grpXian, age5 = k6243_grpXian, age9 = p4044_grpXian, age28 = Y3040_grpXian) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28)
@@ -2015,6 +2038,7 @@ data_temp_age9_p <- data %>%
   rename(preg = pb153_grpXian, age5 = ph6243_grpXian, age9 = pm4044_grpXian) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9_p)
@@ -2080,6 +2104,8 @@ data_temp_age28_p <- data %>%
   rename(preg = pb153_grpXian, age5 = ph6243_grpXian, age9 = pm4044_grpXian, age28 = FC3040_grpXian) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28_p)
@@ -2276,6 +2302,7 @@ data_temp_age9 <- data %>%
   rename(preg = d813_splitXian, age5 = k6243_splitXian, age9 = p4044_splitXian) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9)
@@ -2341,6 +2368,8 @@ data_temp_age28 <- data %>%
   rename(preg = d813_splitXian, age5 = k6243_splitXian, age9 = p4044_splitXian, age28 = Y3040_splitXian) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28)
@@ -2531,6 +2560,7 @@ data_temp_age9_p <- data %>%
   rename(preg = pb153_splitXian, age5 = ph6243_splitXian, age9 = pm4044_splitXian) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9_p)
@@ -2596,6 +2626,8 @@ data_temp_age28_p <- data %>%
   rename(preg = pb153_splitXian, age5 = ph6243_splitXian, age9 = pm4044_splitXian, age28 = FC3040_splitXian) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28_p)
@@ -2772,6 +2804,7 @@ data_temp_age9 <- data %>%
   rename(preg = d815, age5 = k6246, age9 = p4047) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9)
@@ -2837,6 +2870,8 @@ data_temp_age28 <- data %>%
   rename(preg = d815, age5 = k6246, age9 = p4047, age28 = Y3050) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28)
@@ -3007,6 +3042,7 @@ data_temp_age9_p <- data %>%
   rename(preg = pb154, age5 = ph6246, age9 = pm4047) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9_p)
@@ -3072,6 +3108,8 @@ data_temp_age28_p <- data %>%
   rename(preg = pb154, age5 = ph6246, age9 = pm4047, age28 = FC3050) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28_p)
@@ -3208,6 +3246,7 @@ data_temp_age28 <- data %>%
   rename(age6 = l7048, age9 = p4048, age28 = Y3070) %>%
   filter(complete.cases(age6, age9, age28)) %>%
   group_by(age6, age9, age28) %>%
+  rename("6 years post-partum" = age6, "9 years post-partum" = age9, "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28)
@@ -3327,6 +3366,7 @@ data_temp_age28_p <- data %>%
   rename(age6 = pj7048, age9 = pm4048, age28 = FC3070) %>%
   filter(complete.cases(age6, age9, age28)) %>%
   group_by(age6, age9, age28) %>%
+  rename("6 years post-partum" = age6, "9 years post-partum" = age9, "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28_p)
@@ -3540,6 +3580,7 @@ data_temp_age9 <- data %>%
   rename(preg = d816_grp, age5 = k6247_grp, age9 = p4049_grp) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9)
@@ -3605,6 +3646,8 @@ data_temp_age28 <- data %>%
   rename(preg = d816_grp, age5 = k6247_grp, age9 = p4049_grp, age28 = Y3080_grp) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28)
@@ -3823,6 +3866,7 @@ data_temp_age9_p <- data %>%
   rename(preg = pb155_grp, age5 = ph6247_grp, age9 = pm4049_grp) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9_p)
@@ -3888,6 +3932,8 @@ data_temp_age28_p <- data %>%
   rename(preg = pb155_grp, age5 = ph6247_grp, age9 = pm4049_grp, age28 = FC3080_grp) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28_p)
@@ -4068,6 +4114,7 @@ data_temp_age9 <- data %>%
   rename(preg = d817, age5 = k6248, age9 = p4050) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9)
@@ -4133,6 +4180,8 @@ data_temp_age28 <- data %>%
   rename(preg = d817, age5 = k6248, age9 = p4050, age28 = Y3090) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28)
@@ -4307,6 +4356,7 @@ data_temp_age9_p <- data %>%
   rename(preg = pb156, age5 = ph6248, age9 = pm4050) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9_p)
@@ -4372,6 +4422,8 @@ data_temp_age28_p <- data %>%
   rename(preg = pb156, age5 = ph6248, age9 = pm4050, age28 = FC3090) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28_p)
@@ -4552,6 +4604,7 @@ data_temp_age9 <- data %>%
   rename(preg = d818, age5 = k6249, age9 = p4051) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9)
@@ -4617,6 +4670,8 @@ data_temp_age28 <- data %>%
   rename(preg = d818, age5 = k6249, age9 = p4051, age28 = Y3091) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28)
@@ -4791,6 +4846,7 @@ data_temp_age9_p <- data %>%
   rename(preg = pb157, age5 = ph6249, age9 = pm4051) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9_p)
@@ -4856,6 +4912,8 @@ data_temp_age28_p <- data %>%
   rename(preg = pb157, age5 = ph6249, age9 = pm4051, age28 = FC3091) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28_p)
@@ -5022,6 +5080,7 @@ data_temp_age9 <- data %>%
   rename(preg = d819, age5 = k6250, age9 = p4052) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9)
@@ -5087,6 +5146,8 @@ data_temp_age28 <- data %>%
   rename(preg = d819, age5 = k6250, age9 = p4052, age28 = Y3092) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28)
@@ -5248,6 +5309,7 @@ data_temp_age9_p <- data %>%
   rename(preg = pb158, age5 = ph6250, age9 = pm4052) %>%
   filter(complete.cases(preg, age5, age9)) %>%
   group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
   summarise(freq = n())
 
 summary(data_temp_age9_p)
@@ -5313,6 +5375,8 @@ data_temp_age28_p <- data %>%
   rename(preg = pb158, age5 = ph6250, age9 = pm4052, age28 = FC3092) %>%
   filter(complete.cases(preg, age5, age9, age28)) %>%
   group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
   summarise(freq = n())
 
 summary(data_temp_age28_p)
@@ -5389,6 +5453,508 @@ sum(data_temp_age28_p$freq)
 ##################################################################################################
 #### Next, to add in Isaac's latent class analysis data and repeat these analyses
 
+## Read in each dataset first, keep just relevant variables, and lightly edit the variable
+
+# Mums in preg
+mum_preg_lca <- read_csv("./LCA_Data/LCA_M_T1.csv")
+head(mum_preg_lca)
+
+mum_preg_lca <- mum_preg_lca %>%
+  select(ALN, class_MT1) %>%
+  rename(aln = ALN, mum_preg_lca = class_MT1) %>%
+  mutate(mum_preg_lca = as.factor(mum_preg_lca)) %>%
+  mutate(mum_preg_lca = recode(mum_preg_lca, "1" = "Highly religious", "2" = "Moderately religious", 
+                               "3" = "Agnostic", "4" = "Atheist")) %>%
+  mutate(mum_preg_lca = factor(mum_preg_lca, levels = c("Highly religious", "Moderately religious", 
+                                                        "Agnostic", "Atheist")))
+
+summary(mum_preg_lca)
+
+# Mums age 5 - Also need to recode some of these LCAs
+mum_age5_lca <- read_csv("./LCA_Data/LCA_M_T2.csv")
+head(mum_age5_lca)
+
+mum_age5_lca <- mum_age5_lca %>%
+  select(ALN, class_MT2) %>%
+  rename(aln = ALN, mum_age5_lca = class_MT2) %>%
+  mutate(mum_age5_lca = as.factor(mum_age5_lca)) %>%
+  mutate(mum_age5_lca = recode(mum_age5_lca, "2" = "3", "3" = "4", "4" = "2")) %>%
+  mutate(mum_age5_lca = recode(mum_age5_lca, "1" = "Highly religious", "2" = "Moderately religious", 
+                               "3" = "Agnostic", "4" = "Atheist")) %>%
+  mutate(mum_age5_lca = factor(mum_age5_lca, levels = c("Highly religious", "Moderately religious", 
+                                                        "Agnostic", "Atheist")))
+
+summary(mum_age5_lca)
+
+# Mums age 6
+mum_age6_lca <- read_csv("./LCA_Data/LCA_M_T3.csv")
+head(mum_age6_lca)
+
+mum_age6_lca <- mum_age6_lca %>%
+  select(ALN, class_MT3) %>%
+  rename(aln = ALN, mum_age6_lca = class_MT3) %>%
+  mutate(mum_age6_lca = as.factor(mum_age6_lca)) %>%
+  mutate(mum_age6_lca = recode(mum_age6_lca, "1" = "Highly religious", "2" = "Moderately religious", 
+                               "3" = "Agnostic", "4" = "Atheist")) %>%
+  mutate(mum_age6_lca = factor(mum_age6_lca, levels = c("Highly religious", "Moderately religious", 
+                                                        "Agnostic", "Atheist")))
+
+summary(mum_age6_lca)
+
+# Mums age 9
+mum_age9_lca <- read_csv("./LCA_Data/LCA_M_T4.csv")
+head(mum_age9_lca)
+
+mum_age9_lca <- mum_age9_lca %>%
+  select(ALN, class_MT4) %>%
+  rename(aln = ALN, mum_age9_lca = class_MT4) %>%
+  mutate(mum_age9_lca = as.factor(mum_age9_lca)) %>%
+  mutate(mum_age9_lca = recode(mum_age9_lca, "1" = "Highly religious", "2" = "Moderately religious", 
+                               "3" = "Agnostic", "4" = "Atheist")) %>%
+  mutate(mum_age9_lca = factor(mum_age9_lca, levels = c("Highly religious", "Moderately religious", 
+                                                        "Agnostic", "Atheist")))
+
+summary(mum_age9_lca)
+
+# Mums age 28 (2019) - Also need to recode some of these LCAs
+mum_age28_lca <- read_csv("./LCA_Data/LCA_M_T5.csv")
+head(mum_age28_lca)
+
+mum_age28_lca <- mum_age28_lca %>%
+  select(ALN, class_MT5) %>%
+  rename(aln = ALN, mum_age28_lca = class_MT5) %>%
+  mutate(mum_age28_lca = as.factor(mum_age28_lca)) %>%
+  mutate(mum_age28_lca = recode(mum_age28_lca, "3" = "4", "4" = "3")) %>%
+  mutate(mum_age28_lca = recode(mum_age28_lca, "1" = "Highly religious", "2" = "Moderately religious", 
+                               "3" = "Agnostic", "4" = "Atheist")) %>%
+  mutate(mum_age28_lca = factor(mum_age28_lca, levels = c("Highly religious", "Moderately religious", 
+                                                        "Agnostic", "Atheist")))
+
+summary(mum_age28_lca)
+
+# Partners in preg
+ptnr_preg_lca <- read_csv("./LCA_Data/LCA_F_T1.csv")
+head(ptnr_preg_lca)
+
+ptnr_preg_lca <- ptnr_preg_lca %>%
+  select(ALN, class_FT1) %>%
+  rename(aln = ALN, ptnr_preg_lca = class_FT1) %>%
+  mutate(ptnr_preg_lca = as.factor(ptnr_preg_lca)) %>%
+  mutate(ptnr_preg_lca = recode(ptnr_preg_lca, "1" = "Highly religious", "2" = "Moderately religious", 
+                               "3" = "Agnostic", "4" = "Atheist")) %>%
+  mutate(ptnr_preg_lca = factor(ptnr_preg_lca, levels = c("Highly religious", "Moderately religious", 
+                                                        "Agnostic", "Atheist")))
+
+summary(ptnr_preg_lca)
+
+# Partners age 5
+ptnr_age5_lca <- read_csv("./LCA_Data/LCA_F_T2.csv")
+head(ptnr_age5_lca)
+
+ptnr_age5_lca <- ptnr_age5_lca %>%
+  select(ALN, class_FT2) %>%
+  rename(aln = ALN, ptnr_age5_lca = class_FT2) %>%
+  mutate(ptnr_age5_lca = as.factor(ptnr_age5_lca)) %>%
+  mutate(ptnr_age5_lca = recode(ptnr_age5_lca, "1" = "Highly religious", "2" = "Moderately religious", 
+                               "3" = "Agnostic", "4" = "Atheist")) %>%
+  mutate(ptnr_age5_lca = factor(ptnr_age5_lca, levels = c("Highly religious", "Moderately religious", 
+                                                        "Agnostic", "Atheist")))
+
+summary(ptnr_age5_lca)
+
+# Partners age 6
+ptnr_age6_lca <- read_csv("./LCA_Data/LCA_F_T3.csv")
+head(ptnr_age6_lca)
+
+ptnr_age6_lca <- ptnr_age6_lca %>%
+  select(ALN, class_FT3) %>%
+  rename(aln = ALN, ptnr_age6_lca = class_FT3) %>%
+  mutate(ptnr_age6_lca = as.factor(ptnr_age6_lca)) %>%
+  mutate(ptnr_age6_lca = recode(ptnr_age6_lca, "1" = "Highly religious", "2" = "Moderately religious", 
+                               "3" = "Agnostic", "4" = "Atheist")) %>%
+  mutate(ptnr_age6_lca = factor(ptnr_age6_lca, levels = c("Highly religious", "Moderately religious", 
+                                                        "Agnostic", "Atheist")))
+
+summary(ptnr_age6_lca)
+
+# Partners age 9
+ptnr_age9_lca <- read_csv("./LCA_Data/LCA_F_T4.csv")
+head(ptnr_age9_lca)
+
+ptnr_age9_lca <- ptnr_age9_lca %>%
+  select(ALN, class_FT4) %>%
+  rename(aln = ALN, ptnr_age9_lca = class_FT4) %>%
+  mutate(ptnr_age9_lca = as.factor(ptnr_age9_lca)) %>%
+  mutate(ptnr_age9_lca = recode(ptnr_age9_lca, "1" = "Highly religious", "2" = "Moderately religious", 
+                               "3" = "Agnostic", "4" = "Atheist")) %>%
+  mutate(ptnr_age9_lca = factor(ptnr_age9_lca, levels = c("Highly religious", "Moderately religious", 
+                                                        "Agnostic", "Atheist")))
+
+summary(ptnr_age9_lca)
+
+# Partners age 28 (2019)
+ptnr_age28_lca <- read_csv("./LCA_Data/LCA_F_T5.csv")
+head(ptnr_age28_lca)
+
+ptnr_age28_lca <- ptnr_age28_lca %>%
+  select(ALN, class_FT5) %>%
+  rename(aln = ALN, ptnr_age28_lca = class_FT5) %>%
+  mutate(ptnr_age28_lca = as.factor(ptnr_age28_lca)) %>%
+  mutate(ptnr_age28_lca = recode(ptnr_age28_lca, "1" = "Highly religious", "2" = "Moderately religious", 
+                                "3" = "Agnostic", "4" = "Atheist")) %>%
+  mutate(ptnr_age28_lca = factor(ptnr_age28_lca, levels = c("Highly religious", "Moderately religious", 
+                                                          "Agnostic", "Atheist")))
+
+summary(ptnr_age28_lca)
+
+
+## Now merge all these files together with the main dataset
+data <- left_join(data, mum_preg_lca, by = "aln")
+data <- left_join(data, mum_age5_lca, by = "aln")
+data <- left_join(data, mum_age6_lca, by = "aln")
+data <- left_join(data, mum_age9_lca, by = "aln")
+data <- left_join(data, mum_age28_lca, by = "aln")
+data <- left_join(data, ptnr_preg_lca, by = "aln")
+data <- left_join(data, ptnr_age5_lca, by = "aln")
+data <- left_join(data, ptnr_age6_lca, by = "aln")
+data <- left_join(data, ptnr_age9_lca, by = "aln")
+data <- left_join(data, ptnr_age28_lca, by = "aln")
+summary(data)
+
+
+#### Now describe the actual data
+
+### Mothers
+
+## Pregnancy
+table(data$mum_preg_lca, useNA = "ifany")
+
+## Age 5
+table(data$mum_age5_lca, useNA = "ifany")
+
+## Age 6
+table(data$mum_age6_lca, useNA = "ifany")
+
+## Age 9
+table(data$mum_age9_lca, useNA = "ifany")
+
+## 2019 (Age 28)
+table(data$mum_age28_lca, useNA = "ifany")
+
+
+## Turn this data into a sankey plot - Both for pregnancy to 2019, and just from pregnancy to age 9 (as less missing data)
+
+# First, have to convert the data to the correct format and remove any missing values. Will first convert the data to summary wide format, then convert to long/lode format. Age age 5 and 6 are very close together, to get a better sense of change over time will drop the age 6 data.
+data_temp_age9 <- data %>%
+  select(mum_preg_lca, mum_age5_lca, mum_age9_lca) %>%
+  rename(preg = mum_preg_lca, age5 = mum_age5_lca, age9 = mum_age9_lca) %>%
+  filter(complete.cases(preg, age5, age9)) %>%
+  group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
+  summarise(freq = n())
+
+summary(data_temp_age9)
+head(data_temp_age9)
+
+data_temp_lodes_age9 <- to_lodes_form(data_temp_age9, axes = 1:3, id = "traj")
+data_temp_lodes_age9 <- data_temp_lodes_age9 %>%
+  rename(time = x, Response = stratum)
+head(data_temp_lodes_age9)
+summary(data_temp_lodes_age9)
+
+lca_age9 <- ggplot(data_temp_lodes_age9,
+                                        aes(x = time, stratum = Response, alluvium = traj,
+                                            y = freq,
+                                            fill = Response, label = Response)) +
+  scale_x_discrete(expand = c(.1, .1)) +
+  geom_flow() +
+  geom_stratum(alpha = .5) +
+  geom_text(stat = "stratum", size = 3) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  theme(legend.position = "none") +
+  xlab("Questionnaire time-point") + ylab("Frequency") +
+  ggtitle("Latent Class - Mothers") + theme(plot.title = element_text(hjust = 0.5))
+
+lca_age9
+
+# Save this plot
+pdf("./Results/LCA_Age9_Mothers.pdf", height = 6, width = 10)
+plot(lca_age9)
+dev.off()
+
+
+## Displaying these results as standard cross-tabs (using only complete cases, so data is identical to that in the sankey plot)
+
+# preg by age 5
+data %>%
+  select(mum_preg_lca, mum_age5_lca, mum_age9_lca) %>%
+  rename(preg = mum_preg_lca, age5 = mum_age5_lca, age9 = mum_age9_lca) %>%
+  filter(complete.cases(preg, age5, age9)) %>%
+  group_by(preg, age5) %>%
+  summarise(freq = n())
+
+# Age 5 by age 9
+data %>%
+  select(mum_preg_lca, mum_age5_lca, mum_age9_lca) %>%
+  rename(preg = mum_preg_lca, age5 = mum_age5_lca, age9 = mum_age9_lca) %>%
+  filter(complete.cases(preg, age5, age9)) %>%
+  group_by(age5, age9) %>%
+  summarise(freq = n())
+
+# Proportions at each time-point
+tab_age9 <-data %>%
+  select(mum_preg_lca, mum_age5_lca, mum_age9_lca) %>%
+  rename(preg = mum_preg_lca, age5 = mum_age5_lca, age9 = mum_age9_lca) %>%
+  filter(complete.cases(preg, age5, age9))
+summary(tab_age9)
+
+
+### Now repeat, but including 2019 RSBB data
+data_temp_age28 <- data %>%
+  select(mum_preg_lca, mum_age5_lca, mum_age9_lca, mum_age28_lca) %>%
+  rename(preg = mum_preg_lca, age5 = mum_age5_lca, age9 = mum_age9_lca, age28 = mum_age28_lca) %>%
+  filter(complete.cases(preg, age5, age9, age28)) %>%
+  group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
+  summarise(freq = n())
+
+summary(data_temp_age28)
+head(data_temp_age28)
+
+data_temp_lodes_age28 <- to_lodes_form(data_temp_age28, axes = 1:4, id = "traj")
+data_temp_lodes_age28 <- data_temp_lodes_age28 %>%
+  rename(time = x, Response = stratum)
+head(data_temp_lodes_age28)
+summary(data_temp_lodes_age28)
+
+lca_age28 <- ggplot(data_temp_lodes_age28,
+                                         aes(x = time, stratum = Response, alluvium = traj,
+                                             y = freq,
+                                             fill = Response, label = Response)) +
+  scale_x_discrete(expand = c(.1, .1)) +
+  geom_flow() +
+  geom_stratum(alpha = .5) +
+  geom_text(stat = "stratum", size = 2) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  theme(legend.position = "none") +
+  xlab("Questionnaire time-point") + ylab("Frequency") +
+  ggtitle("Latent class - Mothers") + theme(plot.title = element_text(hjust = 0.5))
+
+lca_age28
+
+# Save this plot
+pdf("./Results/LCA_Age28_Mothers.pdf", height = 6, width = 10)
+plot(lca_age28)
+dev.off()
+
+
+## Displaying these results as standard cross-tabs (using only complete cases, so data is identical to that in the sankey plot)
+
+# preg by age 5
+data %>%
+  select(mum_preg_lca, mum_age5_lca, mum_age9_lca, mum_age28_lca) %>%
+  rename(preg = mum_preg_lca, age5 = mum_age5_lca, age9 = mum_age9_lca, age28 = mum_age28_lca) %>%
+  filter(complete.cases(preg, age5, age9, age28)) %>%
+  group_by(preg, age5) %>%
+  summarise(freq = n())
+
+# Age 5 by age 9
+data %>%
+  select(mum_preg_lca, mum_age5_lca, mum_age9_lca, mum_age28_lca) %>%
+  rename(preg = mum_preg_lca, age5 = mum_age5_lca, age9 = mum_age9_lca, age28 = mum_age28_lca) %>%
+  filter(complete.cases(preg, age5, age9, age28)) %>%
+  group_by(age5, age9) %>%
+  summarise(freq = n())
+
+# Age 9 by age 28
+data %>%
+  select(mum_preg_lca, mum_age5_lca, mum_age9_lca, mum_age28_lca) %>%
+  rename(preg = mum_preg_lca, age5 = mum_age5_lca, age9 = mum_age9_lca, age28 = mum_age28_lca) %>%
+  filter(complete.cases(preg, age5, age9, age28)) %>%
+  group_by(age9, age28) %>%
+  summarise(freq = n())
+
+# Proportions at each time-point
+tab_age28 <-data %>%
+  select(mum_preg_lca, mum_age5_lca, mum_age9_lca, mum_age28_lca) %>%
+  rename(preg = mum_preg_lca, age5 = mum_age5_lca, age9 = mum_age9_lca, age28 = mum_age28_lca) %>%
+  filter(complete.cases(preg, age5, age9, age28))
+summary(tab_age28)
+
+## Overall increase in atheists over time, while general decrease in all other categories - Is a strange pattern at age 5, though, where the number of 'highly religious' increases (and 'moderately religious' increases) from preg to age 5, but then reverses again at age 9.
+
+# Sample sizes do decrease quite substantially from age 9 to age 28
+sum(data_temp_age9$freq)
+sum(data_temp_age28$freq)
+
+
+### Now repeat for partners
+
+## Pregnancy
+table(data$ptnr_preg_lca, useNA = "ifany")
+
+## Age 5
+table(data$ptnr_age5_lca, useNA = "ifany")
+
+## Age 6
+table(data$ptnr_age6_lca, useNA = "ifany")
+
+## Age 9
+table(data$ptnr_age9_lca, useNA = "ifany")
+
+## 2019 (Age 28)
+table(data$ptnr_age28_lca, useNA = "ifany")
+
+
+## Turn this data into a sankey plot - Both for pregnancy to 2019, and just from pregnancy to age 9 (as less missing data)
+
+# First, have to convert the data to the correct format and remove any missing values. Will first convert the data to summary wide format, then convert to long/lode format. Age age 5 and 6 are very close together, to get a better sense of change over time will drop the age 6 data.
+data_temp_age9_p <- data %>%
+  select(ptnr_preg_lca, ptnr_age5_lca, ptnr_age9_lca) %>%
+  rename(preg = ptnr_preg_lca, age5 = ptnr_age5_lca, age9 = ptnr_age9_lca) %>%
+  filter(complete.cases(preg, age5, age9)) %>%
+  group_by(preg, age5, age9) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9) %>%
+  summarise(freq = n())
+
+summary(data_temp_age9_p)
+head(data_temp_age9_p)
+
+data_temp_lodes_age9_p <- to_lodes_form(data_temp_age9_p, axes = 1:3, id = "traj")
+data_temp_lodes_age9_p <- data_temp_lodes_age9_p %>%
+  rename(time = x, Response = stratum)
+head(data_temp_lodes_age9_p)
+summary(data_temp_lodes_age9_p)
+
+lca_age9_p <- ggplot(data_temp_lodes_age9_p,
+                                          aes(x = time, stratum = Response, alluvium = traj,
+                                              y = freq,
+                                              fill = Response, label = Response)) +
+  scale_x_discrete(expand = c(.1, .1)) +
+  geom_flow() +
+  geom_stratum(alpha = .5) +
+  geom_text(stat = "stratum", size = 3) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  theme(legend.position = "none") +
+  xlab("Questionnaire time-point") + ylab("Frequency") +
+  ggtitle("Latent Class - Partners") + theme(plot.title = element_text(hjust = 0.5))
+
+lca_age9_p
+
+# Save this plot
+pdf("./Results/LCA_Age9_Partners.pdf", height = 6, width = 10)
+plot(lca_age9_p)
+dev.off()
+
+
+## Displaying these results as standard cross-tabs (using only complete cases, so data is identical to that in the sankey plot)
+
+# preg by age 5
+data %>%
+  select(ptnr_preg_lca, ptnr_age5_lca, ptnr_age9_lca) %>%
+  rename(preg = ptnr_preg_lca, age5 = ptnr_age5_lca, age9 = ptnr_age9_lca) %>%
+  filter(complete.cases(preg, age5, age9)) %>%
+  group_by(preg, age5) %>%
+  summarise(freq = n())
+
+# Age 5 by age 9
+data %>%
+  select(ptnr_preg_lca, ptnr_age5_lca, ptnr_age9_lca) %>%
+  rename(preg = ptnr_preg_lca, age5 = ptnr_age5_lca, age9 = ptnr_age9_lca) %>%
+  filter(complete.cases(preg, age5, age9)) %>%
+  group_by(age5, age9) %>%
+  summarise(freq = n())
+
+# Proportions at each time-point
+tab_age9_p <-data %>%
+  select(ptnr_preg_lca, ptnr_age5_lca, ptnr_age9_lca) %>%
+  rename(preg = ptnr_preg_lca, age5 = ptnr_age5_lca, age9 = ptnr_age9_lca) %>%
+  filter(complete.cases(preg, age5, age9))
+summary(tab_age9_p)
+
+
+### Now repeat, but including 2019 RSBB data
+data_temp_age28_p <- data %>%
+  select(ptnr_preg_lca, ptnr_age5_lca, ptnr_age9_lca, ptnr_age28_lca) %>%
+  rename(preg = ptnr_preg_lca, age5 = ptnr_age5_lca, age9 = ptnr_age9_lca, age28 = ptnr_age28_lca) %>%
+  filter(complete.cases(preg, age5, age9, age28)) %>%
+  group_by(preg, age5, age9, age28) %>%
+  rename(Pregnancy = preg, "5 years post-partum" = age5, "9 years post-partum" = age9, 
+         "28 years post-partum" = age28) %>%
+  summarise(freq = n())
+
+summary(data_temp_age28_p)
+head(data_temp_age28_p)
+
+data_temp_lodes_age28_p <- to_lodes_form(data_temp_age28_p, axes = 1:4, id = "traj")
+data_temp_lodes_age28_p <- data_temp_lodes_age28_p %>%
+  rename(time = x, Response = stratum)
+head(data_temp_lodes_age28_p)
+summary(data_temp_lodes_age28_p)
+
+lca_age28_p <- ggplot(data_temp_lodes_age28_p,
+                                           aes(x = time, stratum = Response, alluvium = traj,
+                                               y = freq,
+                                               fill = Response, label = Response)) +
+  scale_x_discrete(expand = c(.1, .1)) +
+  geom_flow() +
+  geom_stratum(alpha = .5) +
+  geom_text(stat = "stratum", size = 2) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  theme(legend.position = "none") +
+  xlab("Questionnaire time-point") + ylab("Frequency") +
+  ggtitle("Latent class - Partners") + theme(plot.title = element_text(hjust = 0.5))
+
+lca_age28_p
+
+# Save this plot
+pdf("./Results/LCA_Age28_Partners.pdf", height = 6, width = 10)
+plot(lca_age28_p)
+dev.off()
+
+## Displaying these results as standard cross-tabs (using only complete cases, so data is identical to that in the sankey plot)
+
+# preg by age 5
+data %>%
+  select(ptnr_preg_lca, ptnr_age5_lca, ptnr_age9_lca, ptnr_age28_lca) %>%
+  rename(preg = ptnr_preg_lca, age5 = ptnr_age5_lca, age9 = ptnr_age9_lca, age28 = ptnr_age28_lca) %>%
+  filter(complete.cases(preg, age5, age9, age28)) %>%
+  group_by(preg, age5) %>%
+  summarise(freq = n())
+
+# Age 5 by age 9
+data %>%
+  select(ptnr_preg_lca, ptnr_age5_lca, ptnr_age9_lca, ptnr_age28_lca) %>%
+  rename(preg = ptnr_preg_lca, age5 = ptnr_age5_lca, age9 = ptnr_age9_lca, age28 = ptnr_age28_lca) %>%
+  filter(complete.cases(preg, age5, age9, age28)) %>%
+  group_by(age5, age9) %>%
+  summarise(freq = n())
+
+# Age 9 by age 28
+data %>%
+  select(ptnr_preg_lca, ptnr_age5_lca, ptnr_age9_lca, ptnr_age28_lca) %>%
+  rename(preg = ptnr_preg_lca, age5 = ptnr_age5_lca, age9 = ptnr_age9_lca, age28 = ptnr_age28_lca) %>%
+  filter(complete.cases(preg, age5, age9, age28)) %>%
+  group_by(age9, age28) %>%
+  summarise(freq = n())
+
+# Proportions at each time-point
+tab_age28_p <-data %>%
+  select(ptnr_preg_lca, ptnr_age5_lca, ptnr_age9_lca, ptnr_age28_lca) %>%
+  rename(preg = ptnr_preg_lca, age5 = ptnr_age5_lca, age9 = ptnr_age9_lca, age28 = ptnr_age28_lca) %>%
+  filter(complete.cases(preg, age5, age9, age28))
+summary(tab_age28_p)
+
+## General decrease in religiosity with age
+
+# Again, sample sizes do decrease quite substantially from age 9 to age 28
+sum(data_temp_age9_p$freq)
+sum(data_temp_age28_p$freq)
 
 
 
@@ -5550,7 +6116,7 @@ table(data$belief_meth1, useNA = "ifany")
 (meth1_age_plot <- ggplot(meth1_data_age) +
   geom_point(aes(x = belief_meth1, y = mean), size = 6, shape = 18) +
   geom_errorbar(aes(x = belief_meth1, ymin = lower_ci, ymax = upper_ci), width = 0.5, size = 1) +
-  ylab("Mean age at birth (years)") + xlab("Change in belief from pregnancy to age 9") +
+  ylab("Mean age at birth (years)") + xlab("Change in belief from pregnancy to 9 years post-partum") +
   ylim(28, 30) + theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   scale_x_discrete(labels = c("ConsNonBel" = "Consistent non-believer \n(n=2,865)", 
                               "ConsBel" = "Consistent believer \n(n=2,906)",
@@ -5624,7 +6190,7 @@ round(prop.table(table(data$belief_meth1, data$c800), 1) * 100, 2)
 
 (meth1_eth_plot <- ggplot(meth1_data_eth, aes(fill = fct_rev(c800), y = n, x = belief_meth1)) +
     geom_bar(position = "fill", stat = "identity") +
-    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to 9 years post-partum") +
     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
     scale_x_discrete(labels = c("ConsNonBel" = "Consistent non-believer \n(n=2,812)", 
                                 "ConsBel" = "Consistent believer \n(n=2,844)",
@@ -5705,7 +6271,7 @@ round(prop.table(table(data$belief_meth1, data$c645a), 1) * 100, 2)
 
 (meth1_edu_plot <- ggplot(meth1_data_edu, aes(fill = fct_rev(c645a), y = n, x = belief_meth1)) +
     geom_bar(position = "fill", stat = "identity") +
-    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to 9 years post-partum") +
     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
     scale_x_discrete(labels = c("ConsNonBel" = "Consistent non-believer \n(n=2,815)", 
                                 "ConsBel" = "Consistent believer \n(n=2,854)",
@@ -5876,7 +6442,7 @@ results_meth1
 (meth1_income_plot <- ggplot(meth1_data_income) +
     geom_point(aes(x = belief_meth1, y = mean), size = 6, shape = 18) +
     geom_errorbar(aes(x = belief_meth1, ymin = lower_ci, ymax = upper_ci), width = 0.5, size = 1) +
-    ylab("Mean weekly household income (log GBP)") + xlab("Change in belief from pregnancy to age 9") +
+    ylab("Mean weekly household income (log GBP)") + xlab("Change in belief from pregnancy to 9 years post-partum") +
     ylim(5.25, 5.45) + theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
     scale_x_discrete(labels = c("ConsNonBel" = "Consistent non-believer \n(n=2,652)", 
                                 "ConsBel" = "Consistent believer \n(n=2,652)",
@@ -5950,7 +6516,7 @@ round(prop.table(table(data$belief_meth1, data$a006), 1) * 100, 2)
 
 (meth1_home_plot <- ggplot(meth1_data_home, aes(fill = fct_rev(a006), y = n, x = belief_meth1)) +
     geom_bar(position = "fill", stat = "identity") +
-    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to 9 years post-partum") +
     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
     scale_x_discrete(labels = c("ConsNonBel" = "Consistent non-believer \n(n=2,818)", 
                                 "ConsBel" = "Consistent believer \n(n=2,856)",
@@ -6092,7 +6658,7 @@ round(prop.table(table(data$belief_meth1, data$dimd2010q5), 1) * 100, 2)
 
 (meth1_imd_plot <- ggplot(meth1_data_imd, aes(fill = fct_rev(dimd2010q5), y = n, x = belief_meth1)) +
     geom_bar(position = "fill", stat = "identity") +
-    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to 9 years post-partum") +
     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
     scale_x_discrete(labels = c("ConsNonBel" = "Consistent non-believer \n(n=2,645)", 
                                 "ConsBel" = "Consistent believer \n(n=2,670)",
@@ -6264,7 +6830,7 @@ round(prop.table(table(data$belief_meth1, data$b032), 1) * 100, 2)
 
 (meth1_firstMum_plot <- ggplot(meth1_data_firstMum, aes(fill = fct_rev(b032), y = n, x = belief_meth1)) +
     geom_bar(position = "fill", stat = "identity") +
-    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to 9 years post-partum") +
     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
     scale_x_discrete(labels = c("ConsNonBel" = "Consistent non-believer \n(n=2,795)", 
                                 "ConsBel" = "Consistent believer \n(n=2,851)",
@@ -6357,7 +6923,7 @@ results_meth2 <- data.frame(exposure = character(), exp_level = character(), out
 (meth2_age_plot <- ggplot(meth2_data_age) +
     geom_point(aes(x = belief_meth2, y = mean), size = 6, shape = 18) +
     geom_errorbar(aes(x = belief_meth2, ymin = lower_ci, ymax = upper_ci), width = 0.5, size = 1) +
-    ylab("Mean age at birth (years)") + xlab("Change in belief from pregnancy to age 9") +
+    ylab("Mean age at birth (years)") + xlab("Change in belief from pregnancy to 9 years post-partum") +
     ylim(26, 30) + theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
     scale_x_discrete(labels = c("NoChange" = "No change \n(n=5,088)", "SmallInc" = "Small increase \n(n=748)",
                                 "BigInc" = "Large increase \n(n=57)", "SmallDec" = "Small decrease \n(n=1,212)",
@@ -6440,7 +7006,7 @@ round(prop.table(table(data$belief_meth2, data$c800), 1) * 100, 2)
 
 (meth2_eth_plot <- ggplot(meth2_data_eth, aes(fill = fct_rev(c800), y = n, x = belief_meth2)) +
     geom_bar(position = "fill", stat = "identity") +
-    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to 9 years post-partum") +
     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
     scale_x_discrete(labels = c("NoChange" = "No change \n(n=4,986)", "SmallInc" = "Small increase \n(n=729)",
                                 "BigInc" = "Large increase \n(n=56)", "SmallDec" = "Small decrease \n(n=1,190)",
@@ -6551,7 +7117,7 @@ round(prop.table(table(data$belief_meth2, data$c645a), 1) * 100, 2)
 
 (meth2_edu_plot <- ggplot(meth2_data_edu, aes(fill = fct_rev(c645a), y = n, x = belief_meth2)) +
     geom_bar(position = "fill", stat = "identity") +
-    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to 9 years post-partum") +
     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
     scale_x_discrete(labels = c("NoChange" = "No change \n(n=5,000)", "SmallInc" = "Small increase \n(n=734)",
                                 "BigInc" = "Large increase \n(n=55)", "SmallDec" = "Small decrease \n(n=1,190)",
@@ -6762,7 +7328,7 @@ results_meth2
 (meth2_income_plot <- ggplot(meth2_data_income) +
     geom_point(aes(x = belief_meth2, y = mean), size = 6, shape = 18) +
     geom_errorbar(aes(x = belief_meth2, ymin = lower_ci, ymax = upper_ci), width = 0.5, size = 1) +
-    ylab("Mean weekly household income (log GBP)") + xlab("Change in belief from pregnancy to age 9") +
+    ylab("Mean weekly household income (log GBP)") + xlab("Change in belief from pregnancy to 9 years post-partum") +
     ylim(5, 5.5) + theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
     scale_x_discrete(labels = c("NoChange" = "No change \n(n=4,681)", "SmallInc" = "Small increase \n(n=684)",
                                 "BigInc" = "Large increase \n(n=52)", "SmallDec" = "Small decrease \n(n=1,131)",
@@ -6845,7 +7411,7 @@ round(prop.table(table(data$belief_meth2, data$a006), 1) * 100, 2)
 
 (meth2_home_plot <- ggplot(meth2_data_home, aes(fill = fct_rev(a006), y = n, x = belief_meth2)) +
     geom_bar(position = "fill", stat = "identity") +
-    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to 9 years post-partum") +
     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
     scale_x_discrete(labels = c("NoChange" = "No change \n(n=5,004)", "SmallInc" = "Small increase \n(n=738)",
                                 "BigInc" = "Large increase \n(n=55)", "SmallDec" = "Small decrease \n(n=1,185)",
@@ -7036,7 +7602,7 @@ round(prop.table(table(data$belief_meth2, data$dimd2010q5), 1) * 100, 2)
 
 (meth2_imd_plot <- ggplot(meth2_data_imd, aes(fill = fct_rev(dimd2010q5), y = n, x = belief_meth2)) +
     geom_bar(position = "fill", stat = "identity") +
-    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to 9 years post-partum") +
     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
     scale_x_discrete(labels = c("NoChange" = "No change \n(n=4,674)", "SmallInc" = "Small increase \n(n=698)",
                                 "BigInc" = "Large increase \n(n=53)", "SmallDec" = "Small decrease \n(n=1,126)",
@@ -7248,7 +7814,7 @@ round(prop.table(table(data$belief_meth2, data$b032), 1) * 100, 2)
 
 (meth2_firstMum_plot <- ggplot(meth2_data_firstMum, aes(fill = fct_rev(b032), y = n, x = belief_meth2)) +
     geom_bar(position = "fill", stat = "identity") +
-    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to age 9") +
+    ylab("Proportion of responses") + xlab("Change in belief from pregnancy to 9 years post-partum") +
     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
     scale_x_discrete(labels = c("NoChange" = "No change \n(n=4,984)", "SmallInc" = "Small increase \n(n=735)",
                                 "BigInc" = "Large increase \n(n=55)", "SmallDec" = "Small decrease \n(n=1,172)",
