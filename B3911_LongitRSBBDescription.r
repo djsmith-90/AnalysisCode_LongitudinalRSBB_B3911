@@ -5524,7 +5524,7 @@ mum_age28_lca <- mum_age28_lca %>%
   select(ALN, class_MT5) %>%
   rename(aln = ALN, mum_age28_lca = class_MT5) %>%
   mutate(mum_age28_lca = as.factor(mum_age28_lca)) %>%
-  mutate(mum_age28_lca = recode(mum_age28_lca, "3" = "4", "4" = "3")) %>%
+  #mutate(mum_age28_lca = recode(mum_age28_lca, "3" = "4", "4" = "3")) %>%
   mutate(mum_age28_lca = recode(mum_age28_lca, "1" = "Highly religious", "2" = "Moderately religious", 
                                "3" = "Agnostic", "4" = "Atheist")) %>%
   mutate(mum_age28_lca = factor(mum_age28_lca, levels = c("Highly religious", "Moderately religious", 
@@ -5547,7 +5547,7 @@ ptnr_preg_lca <- ptnr_preg_lca %>%
 
 summary(ptnr_preg_lca)
 
-# Partners age 5
+# Partners age 5 - Need to recode some of the LCAs
 ptnr_age5_lca <- read_csv("./LCA_Data/LCA_F_T2.csv")
 head(ptnr_age5_lca)
 
@@ -5555,6 +5555,7 @@ ptnr_age5_lca <- ptnr_age5_lca %>%
   select(ALN, class_FT2) %>%
   rename(aln = ALN, ptnr_age5_lca = class_FT2) %>%
   mutate(ptnr_age5_lca = as.factor(ptnr_age5_lca)) %>%
+  mutate(ptnr_age5_lca = recode(ptnr_age5_lca, "1" = "4", "2" = "3", "3" = "2", "4" = "1")) %>%
   mutate(ptnr_age5_lca = recode(ptnr_age5_lca, "1" = "Highly religious", "2" = "Moderately religious", 
                                "3" = "Agnostic", "4" = "Atheist")) %>%
   mutate(ptnr_age5_lca = factor(ptnr_age5_lca, levels = c("Highly religious", "Moderately religious", 
@@ -5592,7 +5593,7 @@ ptnr_age9_lca <- ptnr_age9_lca %>%
 
 summary(ptnr_age9_lca)
 
-# Partners age 28 (2019)
+# Partners age 28 (2019) - Need to recode some of the LCAs
 ptnr_age28_lca <- read_csv("./LCA_Data/LCA_F_T5.csv")
 head(ptnr_age28_lca)
 
@@ -5600,6 +5601,7 @@ ptnr_age28_lca <- ptnr_age28_lca %>%
   select(ALN, class_FT5) %>%
   rename(aln = ALN, ptnr_age28_lca = class_FT5) %>%
   mutate(ptnr_age28_lca = as.factor(ptnr_age28_lca)) %>%
+  mutate(ptnr_age28_lca = recode(ptnr_age28_lca, "1" = "3", "2" = "2", "3" = "4", "4" = "1")) %>%
   mutate(ptnr_age28_lca = recode(ptnr_age28_lca, "1" = "Highly religious", "2" = "Moderately religious", 
                                 "3" = "Agnostic", "4" = "Atheist")) %>%
   mutate(ptnr_age28_lca = factor(ptnr_age28_lca, levels = c("Highly religious", "Moderately religious", 
@@ -5674,7 +5676,7 @@ lca_age9 <- ggplot(data_temp_lodes_age9,
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   theme(legend.position = "none") +
   xlab("Questionnaire time-point") + ylab("Frequency") +
-  ggtitle("Latent Class - Mothers") + theme(plot.title = element_text(hjust = 0.5))
+  ggtitle("Latent religiosity classes - Mothers") + theme(plot.title = element_text(hjust = 0.5))
 
 lca_age9
 
@@ -5741,7 +5743,7 @@ lca_age28 <- ggplot(data_temp_lodes_age28,
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   theme(legend.position = "none") +
   xlab("Questionnaire time-point") + ylab("Frequency") +
-  ggtitle("Latent class - Mothers") + theme(plot.title = element_text(hjust = 0.5))
+  ggtitle("Latent religiosity classes - Mothers") + theme(plot.title = element_text(hjust = 0.5))
 
 lca_age28
 
@@ -5841,7 +5843,7 @@ lca_age9_p <- ggplot(data_temp_lodes_age9_p,
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   theme(legend.position = "none") +
   xlab("Questionnaire time-point") + ylab("Frequency") +
-  ggtitle("Latent Class - Partners") + theme(plot.title = element_text(hjust = 0.5))
+  ggtitle("Latent religiosity classes - Partners") + theme(plot.title = element_text(hjust = 0.5))
 
 lca_age9_p
 
@@ -5908,7 +5910,7 @@ lca_age28_p <- ggplot(data_temp_lodes_age28_p,
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   theme(legend.position = "none") +
   xlab("Questionnaire time-point") + ylab("Frequency") +
-  ggtitle("Latent class - Partners") + theme(plot.title = element_text(hjust = 0.5))
+  ggtitle("Latent religiosity classes - Partners") + theme(plot.title = element_text(hjust = 0.5))
 
 lca_age28_p
 
