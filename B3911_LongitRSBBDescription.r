@@ -59,6 +59,8 @@ data <- data %>%
   mutate(d810 = factor(d810, levels = c("Yes", "Not sure", "No")))
 
 table(data$d810, useNA = "ifany")
+round(prop.table(table(data$d810)) * 100, 1)
+sum(table(data$d810))
 
 ## Age 5
 table(data$k6240, useNA = "ifany")
@@ -72,6 +74,8 @@ data <- data %>%
   mutate(k6240 = factor(k6240, levels = c("Yes", "Not sure", "No")))
 
 table(data$k6240, useNA = "ifany")
+round(prop.table(table(data$k6240)) * 100, 1)
+sum(table(data$k6240))
 
 ## Age 6
 table(data$l7040, useNA = "ifany")
@@ -85,6 +89,8 @@ data <- data %>%
   mutate(l7040 = factor(l7040, levels = c("Yes", "Not sure", "No")))
 
 table(data$l7040, useNA = "ifany")
+round(prop.table(table(data$l7040)) * 100, 1)
+sum(table(data$l7040))
 
 ## Age 9
 table(data$p4040, useNA = "ifany")
@@ -97,6 +103,8 @@ data <- data %>%
   mutate(p4040 = factor(p4040, levels = c("Yes", "Not sure", "No")))
 
 table(data$p4040, useNA = "ifany")
+round(prop.table(table(data$p4040)) * 100, 1)
+sum(table(data$p4040))
 
 ## 2019 (Age 28)
 table(data$Y3000, useNA = "ifany")
@@ -111,6 +119,8 @@ data <- data %>%
   mutate(Y3000 = factor(Y3000, levels = c("Yes", "Not sure", "No")))
 
 table(data$Y3000, useNA = "ifany")
+round(prop.table(table(data$Y3000)) * 100, 1)
+sum(table(data$Y3000))
 
 
 ## Turn this data into a sankey plot - Both for pregnancy to 2019, and just from pregnancy to age 9 (as less missing data)
@@ -186,6 +196,18 @@ tab_age9 <-data %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9)
 
+table(tab_age9$preg)
+round(prop.table(table(tab_age9$preg)) * 100, 1)
+sum(table(tab_age9$preg))
+
+table(tab_age9$age5)
+round(prop.table(table(tab_age9$age5)) * 100, 1)
+sum(table(tab_age9$age5))
+
+table(tab_age9$age9)
+round(prop.table(table(tab_age9$age9)) * 100, 1)
+sum(table(tab_age9$age9))
+
 
 ### Now repeat, but including 2019 RSBB data
 data_temp_age28 <- data %>%
@@ -260,6 +282,23 @@ tab_age28 <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28)
 
+table(tab_age28$preg)
+round(prop.table(table(tab_age28$preg)) * 100, 1)
+sum(table(tab_age28$preg))
+
+table(tab_age28$age5)
+round(prop.table(table(tab_age28$age5)) * 100, 1)
+sum(table(tab_age28$age5))
+
+table(tab_age28$age9)
+round(prop.table(table(tab_age28$age9)) * 100, 1)
+sum(table(tab_age28$age9))
+
+table(tab_age28$age28)
+round(prop.table(table(tab_age28$age28)) * 100, 1)
+sum(table(tab_age28$age28))
+
+
 ## Does appear to be a slight drop in religious belief between pregnancy and age 5, then is stable from age 5 to 9, and then drops again between age 9 and age 28; the 'not sure' group stays approximately the same, while the 'no' group increases. Most of the transitions are between adjacent groups (i.e., from 'yes' to 'not sure', rather than 'yes' to 'no'), although in general large shifts are more likely to be from 'yes' to 'no', rather than from 'no' to 'yes'.
 
 # Sample sizes do decrease quite substantially from age 9 to age 28 - from ~6,600 with data at preg, age 5 and age 9, to just ~3,600 with data at preg, age 5, age 9 and age 28.
@@ -289,6 +328,8 @@ data <- data %>%
   mutate(pb150 = factor(pb150, levels = c("Yes", "Not sure", "No")))
 
 table(data$pb150, useNA = "ifany")
+round(prop.table(table(data$pb150)) * 100, 1)
+sum(table(data$pb150))
 
 ## Age 5
 table(data$ph6240, useNA = "ifany")
@@ -302,6 +343,8 @@ data <- data %>%
   mutate(ph6240 = factor(ph6240, levels = c("Yes", "Not sure", "No")))
 
 table(data$ph6240, useNA = "ifany")
+round(prop.table(table(data$ph6240)) * 100, 1)
+sum(table(data$ph6240))
 
 ## Age 6
 table(data$pj7040, useNA = "ifany")
@@ -315,6 +358,8 @@ data <- data %>%
   mutate(pj7040 = factor(pj7040, levels = c("Yes", "Not sure", "No")))
 
 table(data$pj7040, useNA = "ifany")
+round(prop.table(table(data$pj7040)) * 100, 1)
+sum(table(data$pj7040))
 
 ## Age 9
 table(data$pm4040, useNA = "ifany")
@@ -327,6 +372,8 @@ data <- data %>%
   mutate(pm4040 = factor(pm4040, levels = c("Yes", "Not sure", "No")))
 
 table(data$pm4040, useNA = "ifany")
+round(prop.table(table(data$pm4040)) * 100, 1)
+sum(table(data$pm4040))
 
 ## 2019 (Age 28)
 table(data$FC3000, useNA = "ifany")
@@ -341,6 +388,8 @@ data <- data %>%
   mutate(FC3000 = factor(FC3000, levels = c("Yes", "Not sure", "No")))
 
 table(data$FC3000, useNA = "ifany")
+round(prop.table(table(data$FC3000)) * 100, 1)
+sum(table(data$FC3000))
 
 
 ## Turn this data into a sankey plot - Both for pregnancy to 2019, and just from pregnancy to age 9 (as less missing data)
@@ -409,6 +458,18 @@ tab_age9_p <-data %>%
   rename(preg = pb150, age5 = ph6240, age9 = pm4040) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9_p)
+
+table(tab_age9_p$preg)
+round(prop.table(table(tab_age9_p$preg)) * 100, 1)
+sum(table(tab_age9_p$preg))
+
+table(tab_age9_p$age5)
+round(prop.table(table(tab_age9_p$age5)) * 100, 1)
+sum(table(tab_age9_p$age5))
+
+table(tab_age9_p$age9)
+round(prop.table(table(tab_age9_p$age9)) * 100, 1)
+sum(table(tab_age9_p$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -484,6 +545,22 @@ tab_age28_p <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28_p)
 
+table(tab_age28_p$preg)
+round(prop.table(table(tab_age28_p$preg)) * 100, 1)
+sum(table(tab_age28_p$preg))
+
+table(tab_age28_p$age5)
+round(prop.table(table(tab_age28_p$age5)) * 100, 1)
+sum(table(tab_age28_p$age5))
+
+table(tab_age28_p$age9)
+round(prop.table(table(tab_age28_p$age9)) * 100, 1)
+sum(table(tab_age28_p$age9))
+
+table(tab_age28_p$age28)
+round(prop.table(table(tab_age28_p$age28)) * 100, 1)
+sum(table(tab_age28_p$age28))
+
 ## Very similar pattern of results to the mothers: Appears to be a slight drop in religious belief between pregnancy and age 5, then is stable from age 5 to 9, and then drops again between age 9 and age 28; the 'not sure' group stays approximately the same, while the 'no' group increases. Most of the transitions are between adjacent groups (i.e., from 'yes' to 'not sure', rather than 'yes' to 'no'), although in general large shifts are more likely to be from 'yes' to 'no', rather than from 'no' to 'yes'.
 
 # Again, sample sizes do decrease quite substantially from age 9 to age 28 - from 2,666 with data at preg, age 5 and age 9, to just 1,233 with data at preg, age 5, age 9 and age 28.
@@ -506,6 +583,8 @@ data <- data %>%
   mutate(d811 = factor(d811, levels = c("Yes", "Not sure", "No")))
 
 table(data$d811, useNA = "ifany")
+round(prop.table(table(data$d811)) * 100, 1)
+sum(table(data$d811))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$d810[is.na(data$d811)])
@@ -521,6 +600,8 @@ data <- data %>%
   mutate(k6241 = factor(k6241, levels = c("Yes", "Not sure", "No")))
 
 table(data$k6241, useNA = "ifany")
+round(prop.table(table(data$k6241)) * 100, 1)
+sum(table(data$k6241))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$k6240[is.na(data$k6241)])
@@ -536,6 +617,8 @@ data <- data %>%
   mutate(l7041 = factor(l7041, levels = c("Yes", "Not sure", "No")))
 
 table(data$l7041, useNA = "ifany")
+round(prop.table(table(data$l7041)) * 100, 1)
+sum(table(data$l7041))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$l7040[is.na(data$l7041)])
@@ -551,6 +634,8 @@ data <- data %>%
   mutate(p4041 = factor(p4041, levels = c("Yes", "Not sure", "No")))
 
 table(data$p4041, useNA = "ifany")
+round(prop.table(table(data$p4041)) * 100, 1)
+sum(table(data$p4041))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$p4040[is.na(data$p4041)])
@@ -568,6 +653,8 @@ data <- data %>%
   mutate(Y3010 = factor(Y3010, levels = c("Yes", "Not sure", "No")))
 
 table(data$Y3010, useNA = "ifany")
+round(prop.table(table(data$Y3010)) * 100, 1)
+sum(table(data$Y3010))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$Y3000[is.na(data$Y3010)])
@@ -639,6 +726,18 @@ tab_age9 <-data %>%
   rename(preg = d811, age5 = k6241, age9 = p4041) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9)
+
+table(tab_age9$preg)
+round(prop.table(table(tab_age9$preg)) * 100, 1)
+sum(table(tab_age9$preg))
+
+table(tab_age9$age5)
+round(prop.table(table(tab_age9$age5)) * 100, 1)
+sum(table(tab_age9$age5))
+
+table(tab_age9$age9)
+round(prop.table(table(tab_age9$age9)) * 100, 1)
+sum(table(tab_age9$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -714,6 +813,23 @@ tab_age28 <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28)
 
+table(tab_age28$preg)
+round(prop.table(table(tab_age28$preg)) * 100, 1)
+sum(table(tab_age28$preg))
+
+table(tab_age28$age5)
+round(prop.table(table(tab_age28$age5)) * 100, 1)
+sum(table(tab_age28$age5))
+
+table(tab_age28$age9)
+round(prop.table(table(tab_age28$age9)) * 100, 1)
+sum(table(tab_age28$age9))
+
+table(tab_age28$age28)
+round(prop.table(table(tab_age28$age28)) * 100, 1)
+sum(table(tab_age28$age28))
+
+
 ## 'Yes' is generally quite stable, but is a shift over time (esp. at age 28) from 'not sure' to 'no'. This is potentially a bit strange, as the question asks if God/divine power has helped 'at any time', so may not really expect shifts from positive to not sure/no (potentially re-evaluating prior experiences, though, perhaps?)
 
 # Sample sizes do decrease quite substantially from age 9 to age 28
@@ -733,6 +849,8 @@ data <- data %>%
   mutate(pb151 = factor(pb151, levels = c("Yes", "Not sure", "No")))
 
 table(data$pb151, useNA = "ifany")
+round(prop.table(table(data$pb151)) * 100, 1)
+sum(table(data$pb151))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$pb150[is.na(data$pb151)])
@@ -748,6 +866,8 @@ data <- data %>%
   mutate(ph6241 = factor(ph6241, levels = c("Yes", "Not sure", "No")))
 
 table(data$ph6241, useNA = "ifany")
+round(prop.table(table(data$ph6241)) * 100, 1)
+sum(table(data$ph6241))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$ph6240[is.na(data$ph6241)])
@@ -763,6 +883,8 @@ data <- data %>%
   mutate(pj7041 = factor(pj7041, levels = c("Yes", "Not sure", "No")))
 
 table(data$pj7041, useNA = "ifany")
+round(prop.table(table(data$pj7041)) * 100, 1)
+sum(table(data$pj7041))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$pj7040[is.na(data$pj7041)])
@@ -778,6 +900,8 @@ data <- data %>%
   mutate(pm4041 = factor(pm4041, levels = c("Yes", "Not sure", "No")))
 
 table(data$pm4041, useNA = "ifany")
+round(prop.table(table(data$pm4041)) * 100, 1)
+sum(table(data$pm4041))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$pm4040[is.na(data$pm4041)])
@@ -795,6 +919,8 @@ data <- data %>%
   mutate(FC3010 = factor(FC3010, levels = c("Yes", "Not sure", "No")))
 
 table(data$FC3010, useNA = "ifany")
+round(prop.table(table(data$FC3010)) * 100, 1)
+sum(table(data$FC3010))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$FC3000[is.na(data$FC3010)])
@@ -867,6 +993,18 @@ tab_age9_p <-data %>%
   rename(preg = pb151, age5 = ph6241, age9 = pm4041) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9_p)
+
+table(tab_age9_p$preg)
+round(prop.table(table(tab_age9_p$preg)) * 100, 1)
+sum(table(tab_age9_p$preg))
+
+table(tab_age9_p$age5)
+round(prop.table(table(tab_age9_p$age5)) * 100, 1)
+sum(table(tab_age9_p$age5))
+
+table(tab_age9_p$age9)
+round(prop.table(table(tab_age9_p$age9)) * 100, 1)
+sum(table(tab_age9_p$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -942,6 +1080,22 @@ tab_age28_p <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28_p)
 
+table(tab_age28_p$preg)
+round(prop.table(table(tab_age28_p$preg)) * 100, 1)
+sum(table(tab_age28_p$preg))
+
+table(tab_age28_p$age5)
+round(prop.table(table(tab_age28_p$age5)) * 100, 1)
+sum(table(tab_age28_p$age5))
+
+table(tab_age28_p$age9)
+round(prop.table(table(tab_age28_p$age9)) * 100, 1)
+sum(table(tab_age28_p$age9))
+
+table(tab_age28_p$age28)
+round(prop.table(table(tab_age28_p$age28)) * 100, 1)
+sum(table(tab_age28_p$age28))
+
 ## Very similar pattern of results to the mothers: Little change in 'yes' responses, but from age 9 to age 28 there is a noticable shift from 'not sure' to 'no'.
 
 # Again, sample sizes do decrease quite substantially from age 9 to age 28
@@ -964,6 +1118,8 @@ data <- data %>%
   mutate(d812 = factor(d812, levels = c("Yes", "Not sure", "No")))
 
 table(data$d812, useNA = "ifany")
+round(prop.table(table(data$d812)) * 100, 1)
+sum(table(data$d812))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$d810[is.na(data$d812)])
@@ -979,6 +1135,8 @@ data <- data %>%
   mutate(k6242 = factor(k6242, levels = c("Yes", "Not sure", "No")))
 
 table(data$k6242, useNA = "ifany")
+round(prop.table(table(data$k6242)) * 100, 1)
+sum(table(data$k6242))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$k6240[is.na(data$k6242)])
@@ -994,6 +1152,8 @@ data <- data %>%
   mutate(l7042 = factor(l7042, levels = c("Yes", "Not sure", "No")))
 
 table(data$l7042, useNA = "ifany")
+round(prop.table(table(data$l7042)) * 100, 1)
+sum(table(data$l7042))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$l7040[is.na(data$l7042)])
@@ -1009,6 +1169,8 @@ data <- data %>%
   mutate(p4042 = factor(p4042, levels = c("Yes", "Not sure", "No")))
 
 table(data$p4042, useNA = "ifany")
+round(prop.table(table(data$p4042)) * 100, 1)
+sum(table(data$p4042))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$p4040[is.na(data$p4042)])
@@ -1026,6 +1188,8 @@ data <- data %>%
   mutate(Y3020 = factor(Y3020, levels = c("Yes", "Not sure", "No")))
 
 table(data$Y3020, useNA = "ifany")
+round(prop.table(table(data$Y3020)) * 100, 1)
+sum(table(data$Y3020))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$Y3000[is.na(data$Y3020)])
@@ -1097,6 +1261,18 @@ tab_age9 <-data %>%
   rename(preg = d812, age5 = k6242, age9 = p4042) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9)
+
+table(tab_age9$preg)
+round(prop.table(table(tab_age9$preg)) * 100, 1)
+sum(table(tab_age9$preg))
+
+table(tab_age9$age5)
+round(prop.table(table(tab_age9$age5)) * 100, 1)
+sum(table(tab_age9$age5))
+
+table(tab_age9$age9)
+round(prop.table(table(tab_age9$age9)) * 100, 1)
+sum(table(tab_age9$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -1172,6 +1348,22 @@ tab_age28 <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28)
 
+table(tab_age28$preg)
+round(prop.table(table(tab_age28$preg)) * 100, 1)
+sum(table(tab_age28$preg))
+
+table(tab_age28$age5)
+round(prop.table(table(tab_age28$age5)) * 100, 1)
+sum(table(tab_age28$age5))
+
+table(tab_age28$age9)
+round(prop.table(table(tab_age28$age9)) * 100, 1)
+sum(table(tab_age28$age9))
+
+table(tab_age28$age28)
+round(prop.table(table(tab_age28$age28)) * 100, 1)
+sum(table(tab_age28$age28))
+
 ## 'Yes' is generally quite stable (but a slight decrease over time), but is a shift over time (esp. at age 28) from 'not sure' to 'no'.
 
 # Sample sizes do decrease quite substantially from age 9 to age 28
@@ -1191,6 +1383,8 @@ data <- data %>%
   mutate(pb152 = factor(pb152, levels = c("Yes", "Not sure", "No")))
 
 table(data$pb152, useNA = "ifany")
+round(prop.table(table(data$pb152)) * 100, 1)
+sum(table(data$pb152))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$pb150[is.na(data$pb152)])
@@ -1206,6 +1400,8 @@ data <- data %>%
   mutate(ph6242 = factor(ph6242, levels = c("Yes", "Not sure", "No")))
 
 table(data$ph6242, useNA = "ifany")
+round(prop.table(table(data$ph6242)) * 100, 1)
+sum(table(data$ph6242))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$ph6240[is.na(data$ph6242)])
@@ -1221,6 +1417,8 @@ data <- data %>%
   mutate(pj7042 = factor(pj7042, levels = c("Yes", "Not sure", "No")))
 
 table(data$pj7042, useNA = "ifany")
+round(prop.table(table(data$pj7042)) * 100, 1)
+sum(table(data$pj7042))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$pj7040[is.na(data$pj7042)])
@@ -1236,6 +1434,8 @@ data <- data %>%
   mutate(pm4042 = factor(pm4042, levels = c("Yes", "Not sure", "No")))
 
 table(data$pm4042, useNA = "ifany")
+round(prop.table(table(data$pm4042)) * 100, 1)
+sum(table(data$pm4042))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$pm4040[is.na(data$pm4042)])
@@ -1253,6 +1453,8 @@ data <- data %>%
   mutate(FC3020 = factor(FC3020, levels = c("Yes", "Not sure", "No")))
 
 table(data$FC3020, useNA = "ifany")
+round(prop.table(table(data$FC3020)) * 100, 1)
+sum(table(data$FC3020))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$FC3000[is.na(data$FC3020)])
@@ -1324,6 +1526,18 @@ tab_age9_p <-data %>%
   rename(preg = pb152, age5 = ph6242, age9 = pm4042) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9_p)
+
+table(tab_age9_p$preg)
+round(prop.table(table(tab_age9_p$preg)) * 100, 1)
+sum(table(tab_age9_p$preg))
+
+table(tab_age9_p$age5)
+round(prop.table(table(tab_age9_p$age5)) * 100, 1)
+sum(table(tab_age9_p$age5))
+
+table(tab_age9_p$age9)
+round(prop.table(table(tab_age9_p$age9)) * 100, 1)
+sum(table(tab_age9_p$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -1399,6 +1613,22 @@ tab_age28_p <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28_p)
 
+table(tab_age28_p$preg)
+round(prop.table(table(tab_age28_p$preg)) * 100, 1)
+sum(table(tab_age28_p$preg))
+
+table(tab_age28_p$age5)
+round(prop.table(table(tab_age28_p$age5)) * 100, 1)
+sum(table(tab_age28_p$age5))
+
+table(tab_age28_p$age9)
+round(prop.table(table(tab_age28_p$age9)) * 100, 1)
+sum(table(tab_age28_p$age9))
+
+table(tab_age28_p$age28)
+round(prop.table(table(tab_age28_p$age28)) * 100, 1)
+sum(table(tab_age28_p$age28))
+
 ## Very similar pattern of results to the mothers: Slight decrease in 'yes' responses, but from age 9 to age 28 there is a noticeable shift from 'not sure' to 'no'.
 
 # Again, sample sizes do decrease quite substantially from age 9 to age 28
@@ -1425,6 +1655,8 @@ data <- data %>%
   mutate(l7043 = factor(l7043, levels = c("Yes", "No")))
 
 table(data$l7043, useNA = "ifany")
+round(prop.table(table(data$l7043)) * 100, 1)
+sum(table(data$l7043))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is quite a bit of missing data, but the majority are 'yes' or 'not sure' to belief in God, so will leave as is.
 table(data$l7040[is.na(data$l7043)])
@@ -1441,6 +1673,8 @@ data <- data %>%
   mutate(p4043 = factor(p4043, levels = c("Yes", "No")))
 
 table(data$p4043, useNA = "ifany")
+round(prop.table(table(data$p4043)) * 100, 1)
+sum(table(data$p4043))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is quite a bit of missing data, but the majority are 'yes' or 'not sure' to belief in God, so will leave as is.
 table(data$p4040[is.na(data$p4043)])
@@ -1464,6 +1698,8 @@ data <- data %>%
   mutate(Y3030 = factor(Y3030, levels = c("Yes", "No")))
 
 table(data$Y3030, useNA = "ifany")
+round(prop.table(table(data$Y3030)) * 100, 1)
+sum(table(data$Y3030))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$Y3000[is.na(data$Y3030)])
@@ -1533,6 +1769,18 @@ tab_age28 <-data %>%
   filter(complete.cases(age6, age9, age28))
 summary(tab_age28)
 
+table(tab_age28$age6)
+round(prop.table(table(tab_age28$age6)) * 100, 1)
+sum(table(tab_age28$age6))
+
+table(tab_age28$age9)
+round(prop.table(table(tab_age28$age9)) * 100, 1)
+sum(table(tab_age28$age9))
+
+table(tab_age28$age28)
+round(prop.table(table(tab_age28$age28)) * 100, 1)
+sum(table(tab_age28$age28))
+
 ## 'No' increases from age 9 to age 28.
 sum(data_temp_age28$freq)
 
@@ -1551,6 +1799,8 @@ data <- data %>%
   mutate(pj7043 = factor(pj7043, levels = c("Yes", "No")))
 
 table(data$pj7043, useNA = "ifany")
+round(prop.table(table(data$pj7043)) * 100, 1)
+sum(table(data$pj7043))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$pj7040[is.na(data$pj7043)])
@@ -1566,6 +1816,8 @@ data <- data %>%
   mutate(pm4043 = factor(pm4043, levels = c("Yes", "No")))
 
 table(data$pm4043, useNA = "ifany")
+round(prop.table(table(data$pm4043)) * 100, 1)
+sum(table(data$pm4043))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$pm4040[is.na(data$pm4043)])
@@ -1588,6 +1840,8 @@ data <- data %>%
   mutate(FC3030 = factor(FC3030, levels = c("Yes", "No")))
 
 table(data$FC3030, useNA = "ifany")
+round(prop.table(table(data$FC3030)) * 100, 1)
+sum(table(data$FC3030))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Very little missing data, and not especially biased towards non-believers, so will leave as is.
 table(data$FC3000[is.na(data$FC3030)])
@@ -1657,6 +1911,18 @@ tab_age28_p <-data %>%
   filter(complete.cases(age6, age9, age28))
 summary(tab_age28_p)
 
+table(tab_age28_p$age6)
+round(prop.table(table(tab_age28_p$age6)) * 100, 1)
+sum(table(tab_age28_p$age6))
+
+table(tab_age28_p$age9)
+round(prop.table(table(tab_age28_p$age9)) * 100, 1)
+sum(table(tab_age28_p$age9))
+
+table(tab_age28_p$age28)
+round(prop.table(table(tab_age28_p$age28)) * 100, 1)
+sum(table(tab_age28_p$age28))
+
 ## Very similar pattern of results to the mothers: Slight decrease in 'yes' responses from age 9 to age 28
 sum(data_temp_age28_p$freq)
 
@@ -1681,6 +1947,8 @@ data <- data %>%
   mutate(d813_grpXian = factor(d813_grpXian, levels = c("Christian", "None", "Other")))
 
 table(data$d813_grpXian, useNA = "ifany")
+round(prop.table(table(data$d813_grpXian)) * 100, 1)
+sum(table(data$d813_grpXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$d810[is.na(data$d813_grpXian)])
@@ -1701,6 +1969,8 @@ data <- data %>%
   mutate(k6243_grpXian = factor(k6243_grpXian, levels = c("Christian", "None", "Other")))
 
 table(data$k6243_grpXian, useNA = "ifany")
+round(prop.table(table(data$k6243_grpXian)) * 100, 1)
+sum(table(data$k6243_grpXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results above will leave as is.
 table(data$k6240[is.na(data$k6243_grpXian)])
@@ -1723,6 +1993,8 @@ data <- data %>%
   mutate(l7044_grpXian = factor(l7044_grpXian, levels = c("Christian", "None", "Other")))
 
 table(data$l7044_grpXian, useNA = "ifany")
+round(prop.table(table(data$l7044_grpXian)) * 100, 1)
+sum(table(data$l7044_grpXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results above will leave as is.
 table(data$l7040[is.na(data$l7044_grpXian)])
@@ -1744,6 +2016,8 @@ data <- data %>%
   mutate(p4044_grpXian = factor(p4044_grpXian, levels = c("Christian", "None", "Other")))
 
 table(data$p4044_grpXian, useNA = "ifany")
+round(prop.table(table(data$p4044_grpXian)) * 100, 1)
+sum(table(data$p4044_grpXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results above will leave as is.
 table(data$p4040[is.na(data$p4044_grpXian)])
@@ -1769,6 +2043,8 @@ data <- data %>%
   mutate(Y3040_grpXian = factor(Y3040_grpXian, levels = c("Christian", "None", "Other")))
 
 table(data$Y3040_grpXian, useNA = "ifany")
+round(prop.table(table(data$Y3040_grpXian)) * 100, 1)
+sum(table(data$Y3040_grpXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is a little missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results above will leave as is.
 table(data$Y3000[is.na(data$Y3040_grpXian)])
@@ -1840,6 +2116,18 @@ tab_age9 <-data %>%
   rename(preg = d813_grpXian, age5 = k6243_grpXian, age9 = p4044_grpXian) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9)
+
+table(tab_age9$preg)
+round(prop.table(table(tab_age9$preg)) * 100, 1)
+sum(table(tab_age9$preg))
+
+table(tab_age9$age5)
+round(prop.table(table(tab_age9$age5)) * 100, 1)
+sum(table(tab_age9$age5))
+
+table(tab_age9$age9)
+round(prop.table(table(tab_age9$age9)) * 100, 1)
+sum(table(tab_age9$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -1915,6 +2203,22 @@ tab_age28 <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28)
 
+table(tab_age28$preg)
+round(prop.table(table(tab_age28$preg)) * 100, 1)
+sum(table(tab_age28$preg))
+
+table(tab_age28$age5)
+round(prop.table(table(tab_age28$age5)) * 100, 1)
+sum(table(tab_age28$age5))
+
+table(tab_age28$age9)
+round(prop.table(table(tab_age28$age9)) * 100, 1)
+sum(table(tab_age28$age9))
+
+table(tab_age28$age28)
+round(prop.table(table(tab_age28$age28)) * 100, 1)
+sum(table(tab_age28$age28))
+
 ## Stable from preg to age 9, but then increase in 'none' and 'other' to age 28
 
 # Sample sizes do decrease quite substantially from age 9 to age 28
@@ -1938,6 +2242,8 @@ data <- data %>%
   mutate(pb153_grpXian = factor(pb153_grpXian, levels = c("Christian", "None", "Other")))
 
 table(data$pb153_grpXian, useNA = "ifany")
+round(prop.table(table(data$pb153_grpXian)) * 100, 1)
+sum(table(data$pb153_grpXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results for mothers will leave as is.
 table(data$pb150[is.na(data$pb153_grpXian)])
@@ -1958,6 +2264,8 @@ data <- data %>%
   mutate(ph6243_grpXian = factor(ph6243_grpXian, levels = c("Christian", "None", "Other")))
 
 table(data$ph6243_grpXian, useNA = "ifany")
+round(prop.table(table(data$ph6243_grpXian)) * 100, 1)
+sum(table(data$ph6243_grpXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results for mothers will leave as is.
 table(data$ph6240[is.na(data$ph6243_grpXian)])
@@ -1979,6 +2287,8 @@ data <- data %>%
   mutate(pj7044_grpXian = factor(pj7044_grpXian, levels = c("Christian", "None", "Other")))
 
 table(data$pj7044_grpXian, useNA = "ifany")
+round(prop.table(table(data$pj7044_grpXian)) * 100, 1)
+sum(table(data$pj7044_grpXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results for mothers will leave as is.
 table(data$pj7040[is.na(data$pj7044_grpXian)])
@@ -2000,6 +2310,8 @@ data <- data %>%
   mutate(pm4044_grpXian = factor(pm4044_grpXian, levels = c("Christian", "None", "Other")))
 
 table(data$pm4044_grpXian, useNA = "ifany")
+round(prop.table(table(data$pm4044_grpXian)) * 100, 1)
+sum(table(data$pm4044_grpXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results for mothers will leave as is.
 table(data$pm4040[is.na(data$pm4044_grpXian)])
@@ -2025,6 +2337,8 @@ data <- data %>%
   mutate(FC3040_grpXian = factor(FC3040_grpXian, levels = c("Christian", "None", "Other")))
 
 table(data$FC3040_grpXian, useNA = "ifany")
+round(prop.table(table(data$FC3040_grpXian)) * 100, 1)
+sum(table(data$FC3040_grpXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results for mothers will leave as is.
 table(data$FC3000[is.na(data$FC3040_grpXian)])
@@ -2096,6 +2410,18 @@ tab_age9_p <-data %>%
   rename(preg = pb153_grpXian, age5 = ph6243_grpXian, age9 = pm4044_grpXian) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9_p)
+
+table(tab_age9_p$preg)
+round(prop.table(table(tab_age9_p$preg)) * 100, 1)
+sum(table(tab_age9_p$preg))
+
+table(tab_age9_p$age5)
+round(prop.table(table(tab_age9_p$age5)) * 100, 1)
+sum(table(tab_age9_p$age5))
+
+table(tab_age9_p$age9)
+round(prop.table(table(tab_age9_p$age9)) * 100, 1)
+sum(table(tab_age9_p$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -2171,6 +2497,23 @@ tab_age28_p <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28_p)
 
+table(tab_age28_p$preg)
+round(prop.table(table(tab_age28_p$preg)) * 100, 1)
+sum(table(tab_age28_p$preg))
+
+table(tab_age28_p$age5)
+round(prop.table(table(tab_age28_p$age5)) * 100, 1)
+sum(table(tab_age28_p$age5))
+
+table(tab_age28_p$age9)
+round(prop.table(table(tab_age28_p$age9)) * 100, 1)
+sum(table(tab_age28_p$age9))
+
+table(tab_age28_p$age28)
+round(prop.table(table(tab_age28_p$age28)) * 100, 1)
+sum(table(tab_age28_p$age28))
+
+
 ## Very similar pattern of results to the mothers: Quite stable from preg to age 9, then increase in 'none' and drop in 'Christian' at age 28
 
 # Again, sample sizes do decrease quite substantially from age 9 to age 28
@@ -2199,6 +2542,8 @@ data <- data %>%
                                                             "Other Christian", "None", "Other")))
 
 table(data$d813_splitXian, useNA = "ifany")
+round(prop.table(table(data$d813_splitXian)) * 100, 1)
+sum(table(data$d813_splitXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$d810[is.na(data$d813_splitXian)])
@@ -2220,6 +2565,8 @@ data <- data %>%
                                                               "Other Christian", "None", "Other")))
 
 table(data$k6243_splitXian, useNA = "ifany")
+round(prop.table(table(data$k6243_splitXian)) * 100, 1)
+sum(table(data$k6243_splitXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results above will leave as is.
 table(data$k6240[is.na(data$k6243_splitXian)])
@@ -2242,6 +2589,8 @@ data <- data %>%
                                                               "Other Christian", "None", "Other")))
 
 table(data$l7044_splitXian, useNA = "ifany")
+round(prop.table(table(data$l7044_splitXian)) * 100, 1)
+sum(table(data$l7044_splitXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results above will leave as is.
 table(data$l7040[is.na(data$l7044_splitXian)])
@@ -2263,6 +2612,8 @@ data <- data %>%
                                                               "Other Christian", "None", "Other")))
 
 table(data$p4044_splitXian, useNA = "ifany")
+round(prop.table(table(data$p4044_splitXian)) * 100, 1)
+sum(table(data$p4044_splitXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results above will leave as is.
 table(data$p4040[is.na(data$p4044_splitXian)])
@@ -2289,6 +2640,8 @@ data <- data %>%
                                                               "Other Christian", "None", "Other")))
 
 table(data$Y3040_splitXian, useNA = "ifany")
+round(prop.table(table(data$Y3040_splitXian)) * 100, 1)
+sum(table(data$Y3040_splitXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is a little missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results above will leave as is.
 table(data$Y3000[is.na(data$Y3040_splitXian)])
@@ -2360,6 +2713,18 @@ tab_age9 <-data %>%
   rename(preg = d813_splitXian, age5 = k6243_splitXian, age9 = p4044_splitXian) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9)
+
+table(tab_age9$preg)
+round(prop.table(table(tab_age9$preg)) * 100, 1)
+sum(table(tab_age9$preg))
+
+table(tab_age9$age5)
+round(prop.table(table(tab_age9$age5)) * 100, 1)
+sum(table(tab_age9$age5))
+
+table(tab_age9$age9)
+round(prop.table(table(tab_age9$age9)) * 100, 1)
+sum(table(tab_age9$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -2435,6 +2800,23 @@ tab_age28 <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28)
 
+table(tab_age28$preg)
+round(prop.table(table(tab_age28$preg)) * 100, 1)
+sum(table(tab_age28$preg))
+
+table(tab_age28$age5)
+round(prop.table(table(tab_age28$age5)) * 100, 1)
+sum(table(tab_age28$age5))
+
+table(tab_age28$age9)
+round(prop.table(table(tab_age28$age9)) * 100, 1)
+sum(table(tab_age28$age9))
+
+table(tab_age28$age28)
+round(prop.table(table(tab_age28$age28)) * 100, 1)
+sum(table(tab_age28$age28))
+
+
 ## Stable from preg to age 9, but then increase in 'none' and 'other' to age 28
 
 # Sample sizes do decrease quite substantially from age 9 to age 28
@@ -2459,6 +2841,8 @@ data <- data %>%
                                                               "Other Christian", "None", "Other")))
 
 table(data$pb153_splitXian, useNA = "ifany")
+round(prop.table(table(data$pb153_splitXian)) * 100, 1)
+sum(table(data$pb153_splitXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results for mothers will leave as is.
 table(data$pb150[is.na(data$pb153_splitXian)])
@@ -2480,6 +2864,8 @@ data <- data %>%
                                                                 "Other Christian", "None", "Other")))
 
 table(data$ph6243_splitXian, useNA = "ifany")
+round(prop.table(table(data$ph6243_splitXian)) * 100, 1)
+sum(table(data$ph6243_splitXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results for mothers will leave as is.
 table(data$ph6240[is.na(data$ph6243_splitXian)])
@@ -2501,6 +2887,8 @@ data <- data %>%
                                                                 "Other Christian", "None", "Other")))
 
 table(data$pj7044_splitXian, useNA = "ifany")
+round(prop.table(table(data$pj7044_splitXian)) * 100, 1)
+sum(table(data$pj7044_splitXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results for mothers will leave as is.
 table(data$pj7040[is.na(data$pj7044_splitXian)])
@@ -2522,6 +2910,8 @@ data <- data %>%
                                                                 "Other Christian", "None", "Other")))
 
 table(data$pm4044_splitXian, useNA = "ifany")
+round(prop.table(table(data$pm4044_splitXian)) * 100, 1)
+sum(table(data$pm4044_splitXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results for mothers will leave as is.
 table(data$pm4040[is.na(data$pm4044_splitXian)])
@@ -2547,6 +2937,8 @@ data <- data %>%
                                                                 "Other Christian", "None", "Other")))
 
 table(data$FC3040_splitXian, useNA = "ifany")
+round(prop.table(table(data$FC3040_splitXian)) * 100, 1)
+sum(table(data$FC3040_splitXian))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, and is somewhat biased towards non-believers, but given that I haven't altered the results for mothers will leave as is.
 table(data$FC3000[is.na(data$FC3040_splitXian)])
@@ -2618,6 +3010,18 @@ tab_age9_p <-data %>%
   rename(preg = pb153_splitXian, age5 = ph6243_splitXian, age9 = pm4044_splitXian) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9_p)
+
+table(tab_age9_p$preg)
+round(prop.table(table(tab_age9_p$preg)) * 100, 1)
+sum(table(tab_age9_p$preg))
+
+table(tab_age9_p$age5)
+round(prop.table(table(tab_age9_p$age5)) * 100, 1)
+sum(table(tab_age9_p$age5))
+
+table(tab_age9_p$age9)
+round(prop.table(table(tab_age9_p$age9)) * 100, 1)
+sum(table(tab_age9_p$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -2693,6 +3097,22 @@ tab_age28_p <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28_p)
 
+table(tab_age28_p$preg)
+round(prop.table(table(tab_age28_p$preg)) * 100, 1)
+sum(table(tab_age28_p$preg))
+
+table(tab_age28_p$age5)
+round(prop.table(table(tab_age28_p$age5)) * 100, 1)
+sum(table(tab_age28_p$age5))
+
+table(tab_age28_p$age9)
+round(prop.table(table(tab_age28_p$age9)) * 100, 1)
+sum(table(tab_age28_p$age9))
+
+table(tab_age28_p$age28)
+round(prop.table(table(tab_age28_p$age28)) * 100, 1)
+sum(table(tab_age28_p$age28))
+
 ## Very similar pattern of results to the mothers: Catholics are quite stable, while most change is from C of E to None.
 
 # Again, sample sizes do decrease quite substantially from age 9 to age 28
@@ -2717,6 +3137,8 @@ data <- data %>%
   mutate(d815 = factor(d815, levels = c("All life", ">5 Years", "<5 Years")))
 
 table(data$d815, useNA = "ifany")
+round(prop.table(table(data$d815)) * 100, 1)
+sum(table(data$d815))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is biased towards non-believers, but it's not clear how long they have been non-believers, so will leave as is.
 table(data$d810[is.na(data$d815)])
@@ -2736,6 +3158,8 @@ data <- data %>%
   mutate(k6246 = factor(k6246, levels = c("All life", ">5 Years", "<5 Years")))
 
 table(data$k6246, useNA = "ifany")
+round(prop.table(table(data$k6246)) * 100, 1)
+sum(table(data$k6246))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is biased towards non-believers, but it's not clear how long they have been non-believers, so will leave as is.
 table(data$k6240[is.na(data$k6246)])
@@ -2755,6 +3179,8 @@ data <- data %>%
   mutate(l7047 = factor(l7047, levels = c("All life", ">5 Years", "<5 Years")))
 
 table(data$l7047, useNA = "ifany")
+round(prop.table(table(data$l7047)) * 100, 1)
+sum(table(data$l7047))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is biased towards non-believers, but it's not clear how long they have been non-believers, so will leave as is.
 table(data$l7040[is.na(data$l7047)])
@@ -2772,6 +3198,9 @@ data <- data %>%
   mutate(p4047 = factor(p4047, levels = c("All life", ">5 Years", "<5 Years")))
 
 table(data$p4047, useNA = "ifany")
+round(prop.table(table(data$p4047)) * 100, 1)
+sum(table(data$p4047))
+
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is biased towards non-believers, but it's not clear how long they have been non-believers, so will leave as is.
 table(data$p4040[is.na(data$p4047)])
@@ -2791,6 +3220,8 @@ data <- data %>%
   mutate(Y3050 = factor(Y3050, levels = c("All life", ">5 Years", "<5 Years")))
 
 table(data$Y3050, useNA = "ifany")
+round(prop.table(table(data$Y3050)) * 100, 1)
+sum(table(data$Y3050))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is biased towards non-believers, but it's not clear how long they have been non-believers, so will leave as is.
 table(data$Y3000[is.na(data$Y3050)])
@@ -2862,6 +3293,18 @@ tab_age9 <-data %>%
   rename(preg = d815, age5 = k6246, age9 = p4047) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9)
+
+table(tab_age9$preg)
+round(prop.table(table(tab_age9$preg)) * 100, 1)
+sum(table(tab_age9$preg))
+
+table(tab_age9$age5)
+round(prop.table(table(tab_age9$age5)) * 100, 1)
+sum(table(tab_age9$age5))
+
+table(tab_age9$age9)
+round(prop.table(table(tab_age9$age9)) * 100, 1)
+sum(table(tab_age9$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -2938,6 +3381,22 @@ tab_age28 <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28)
 
+table(tab_age28$preg)
+round(prop.table(table(tab_age28$preg)) * 100, 1)
+sum(table(tab_age28$preg))
+
+table(tab_age28$age5)
+round(prop.table(table(tab_age28$age5)) * 100, 1)
+sum(table(tab_age28$age5))
+
+table(tab_age28$age9)
+round(prop.table(table(tab_age28$age9)) * 100, 1)
+sum(table(tab_age28$age9))
+
+table(tab_age28$age28)
+round(prop.table(table(tab_age28$age28)) * 100, 1)
+sum(table(tab_age28$age28))
+
 ## Quite a lot of change in this over time, suggests that perhaps people are quite inconsistent in how they answer this question (sometimes they say 'all life', next time say '>5 years'). Quite hard to interpret these findings.
 
 # Sample sizes do decrease quite substantially from age 9 to age 28
@@ -2958,6 +3417,8 @@ data <- data %>%
   mutate(pb154 = factor(pb154, levels = c("All life", ">5 Years", "<5 Years")))
 
 table(data$pb154, useNA = "ifany")
+round(prop.table(table(data$pb154)) * 100, 1)
+sum(table(data$pb154))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is biased towards non-believers, but it's not clear how long they have been non-believers, so will leave as is.
 table(data$pb150[is.na(data$pb154)])
@@ -2975,6 +3436,8 @@ data <- data %>%
   mutate(ph6246 = factor(ph6246, levels = c("All life", ">5 Years", "<5 Years")))
 
 table(data$ph6246, useNA = "ifany")
+round(prop.table(table(data$ph6246)) * 100, 1)
+sum(table(data$ph6246))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is biased towards non-believers, but it's not clear how long they have been non-believers, so will leave as is..
 table(data$ph6240[is.na(data$ph6246)])
@@ -2993,6 +3456,8 @@ data <- data %>%
 
 
 table(data$pj7047, useNA = "ifany")
+round(prop.table(table(data$pj7047)) * 100, 1)
+sum(table(data$pj7047))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is biased towards non-believers, but it's not clear how long they have been non-believers, so will leave as is.
 table(data$pj7040[is.na(data$pj7047)])
@@ -3010,6 +3475,8 @@ data <- data %>%
   mutate(pm4047 = factor(pm4047, levels = c("All life", ">5 Years", "<5 Years")))
 
 table(data$pm4047, useNA = "ifany")
+round(prop.table(table(data$pm4047)) * 100, 1)
+sum(table(data$pm4047))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is biased towards non-believers, but it's not clear how long they have been non-believers, so will leave as is.
 table(data$pm4040[is.na(data$pm4047)])
@@ -3029,6 +3496,8 @@ data <- data %>%
   mutate(FC3050 = factor(FC3050, levels = c("All life", ">5 Years", "<5 Years")))
 
 table(data$FC3050, useNA = "ifany")
+round(prop.table(table(data$FC3050)) * 100, 1)
+sum(table(data$FC3050))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is biased towards non-believers, but it's not clear how long they have been non-believers, so will leave as is.
 table(data$FC3000[is.na(data$FC3050)])
@@ -3100,6 +3569,18 @@ tab_age9_p <-data %>%
   rename(preg = pb154, age5 = ph6246, age9 = pm4047) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9_p)
+
+table(tab_age9_p$preg)
+round(prop.table(table(tab_age9_p$preg)) * 100, 1)
+sum(table(tab_age9_p$preg))
+
+table(tab_age9_p$age5)
+round(prop.table(table(tab_age9_p$age5)) * 100, 1)
+sum(table(tab_age9_p$age5))
+
+table(tab_age9_p$age9)
+round(prop.table(table(tab_age9_p$age9)) * 100, 1)
+sum(table(tab_age9_p$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -3175,6 +3656,22 @@ tab_age28_p <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28_p)
 
+table(tab_age28_p$preg)
+round(prop.table(table(tab_age28_p$preg)) * 100, 1)
+sum(table(tab_age28_p$preg))
+
+table(tab_age28_p$age5)
+round(prop.table(table(tab_age28_p$age5)) * 100, 1)
+sum(table(tab_age28_p$age5))
+
+table(tab_age28_p$age9)
+round(prop.table(table(tab_age28_p$age9)) * 100, 1)
+sum(table(tab_age28_p$age9))
+
+table(tab_age28_p$age28)
+round(prop.table(table(tab_age28_p$age28)) * 100, 1)
+sum(table(tab_age28_p$age28))
+
 ## Very similar pattern of results to the mothers: Quite a bit of change over time (some of which don't make much sense; e.g., from >5 years to all life...)
 
 # Again, sample sizes do decrease quite substantially from age 9 to age 28
@@ -3201,6 +3698,8 @@ data <- data %>%
   mutate(l7048 = factor(l7048, levels = c("Yes", "No")))
 
 table(data$l7048, useNA = "ifany")
+round(prop.table(table(data$l7048)) * 100, 1)
+sum(table(data$l7048))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is quite a bit of missing data, especially for non-believers, but as haven't updated any other data, will leave as is.
 table(data$l7040[is.na(data$l7048)])
@@ -3217,6 +3716,8 @@ data <- data %>%
   mutate(p4048 = factor(p4048, levels = c("Yes", "No")))
 
 table(data$p4048, useNA = "ifany")
+round(prop.table(table(data$p4048)) * 100, 1)
+sum(table(data$p4048))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is quite a bit of missing data, especially for non-believers, but as haven't updated any other data, will leave as is.
 table(data$p4040[is.na(data$p4048)])
@@ -3235,6 +3736,8 @@ data <- data %>%
   mutate(Y3070 = factor(Y3070, levels = c("Yes", "No")))
 
 table(data$Y3070, useNA = "ifany")
+round(prop.table(table(data$Y3070)) * 100, 1)
+sum(table(data$Y3070))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is quite a bit of missing data, especially for non-believers, but as haven't updated any other data, will leave as is.
 table(data$Y3000[is.na(data$Y3070)])
@@ -3304,6 +3807,18 @@ tab_age28 <-data %>%
   filter(complete.cases(age6, age9, age28))
 summary(tab_age28)
 
+table(tab_age28$age6)
+round(prop.table(table(tab_age28$age6)) * 100, 1)
+sum(table(tab_age28$age6))
+
+table(tab_age28$age9)
+round(prop.table(table(tab_age28$age9)) * 100, 1)
+sum(table(tab_age28$age9))
+
+table(tab_age28$age28)
+round(prop.table(table(tab_age28$age28)) * 100, 1)
+sum(table(tab_age28$age28))
+
 ## 'No' increases from age 9 to age 28.
 sum(data_temp_age28$freq)
 
@@ -3323,6 +3838,8 @@ data <- data %>%
   mutate(pj7048 = factor(pj7048, levels = c("Yes", "No")))
 
 table(data$pj7048, useNA = "ifany")
+round(prop.table(table(data$pj7048)) * 100, 1)
+sum(table(data$pj7048))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is quite a bit of missing data, especially for non-believers, but as haven't updated any other data, will leave as is.
 table(data$pj7040[is.na(data$pj7048)])
@@ -3338,6 +3855,8 @@ data <- data %>%
   mutate(pm4048 = factor(pm4048, levels = c("Yes", "No")))
 
 table(data$pm4048, useNA = "ifany")
+round(prop.table(table(data$pm4048)) * 100, 1)
+sum(table(data$pm4048))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is quite a bit of missing data, especially for non-believers, but as haven't updated any other data, will leave as is.
 table(data$pm4040[is.na(data$pm4048)])
@@ -3355,6 +3874,8 @@ data <- data %>%
   mutate(FC3070 = factor(FC3070, levels = c("Yes", "No")))
 
 table(data$FC3070, useNA = "ifany")
+round(prop.table(table(data$FC3070)) * 100, 1)
+sum(table(data$FC3070))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is quite a bit of missing data, especially for non-believers, but as haven't updated any other data, will leave as is.
 table(data$FC3000[is.na(data$FC3070)])
@@ -3424,6 +3945,18 @@ tab_age28_p <-data %>%
   filter(complete.cases(age6, age9, age28))
 summary(tab_age28_p)
 
+table(tab_age28_p$age6)
+round(prop.table(table(tab_age28_p$age6)) * 100, 1)
+sum(table(tab_age28_p$age6))
+
+table(tab_age28_p$age9)
+round(prop.table(table(tab_age28_p$age9)) * 100, 1)
+sum(table(tab_age28_p$age9))
+
+table(tab_age28_p$age28)
+round(prop.table(table(tab_age28_p$age28)) * 100, 1)
+sum(table(tab_age28_p$age28))
+
 ## No real change over time in these patterns.
 sum(data_temp_age28_p$freq)
 
@@ -3447,6 +3980,8 @@ data <- data %>%
   mutate(d816_grp = factor(d816_grp, levels = c("Regular", "Occasional/None")))
 
 table(data$d816_grp, useNA = "ifany")
+round(prop.table(table(data$d816_grp)) * 100, 1)
+sum(table(data$d816_grp))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is somewhat biased towards non-believers, but as it's not super clear-cut will leave as is.
 table(data$d810[is.na(data$d816_grp)])
@@ -3467,6 +4002,8 @@ data <- data %>%
   mutate(k6247_grp = factor(k6247_grp, levels = c("Regular", "Occasional/None")))
 
 table(data$k6247_grp, useNA = "ifany")
+round(prop.table(table(data$k6247_grp)) * 100, 1)
+sum(table(data$k6247_grp))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is biased towards non-believers, but as it's not super clear-cut (and didn't edit the pregnancy data) will leave as is.
 table(data$k6240[is.na(data$k6247_grp)])
@@ -3492,6 +4029,8 @@ data <- data %>%
   mutate(l7049_grp = factor(l7049_grp, levels = c("Regular", "Occasional/None")))
 
 table(data$l7049_grp, useNA = "ifany")
+round(prop.table(table(data$l7049_grp)) * 100, 1)
+sum(table(data$l7049_grp))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is somewhat biased towards non-believers, but as it's not super clear-cut will leave as is.
 table(data$l7040[is.na(data$l7049_grp)])
@@ -3525,6 +4064,8 @@ data <- data %>%
   mutate(p4049_grp = factor(p4049_grp, levels = c("Regular", "Occasional/None")))
 
 table(data$p4049_grp, useNA = "ifany")
+round(prop.table(table(data$p4049_grp)) * 100, 1)
+sum(table(data$p4049_grp))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is somewhat biased towards non-believers, but as it's not super clear-cut will leave as is.
 table(data$p4040[is.na(data$p4049_grp)])
@@ -3545,6 +4086,8 @@ data <- data %>%
   mutate(Y3080_grp = factor(Y3080_grp, levels = c("Regular", "Occasional/None")))
 
 table(data$Y3080_grp, useNA = "ifany")
+round(prop.table(table(data$Y3080_grp)) * 100, 1)
+sum(table(data$Y3080_grp))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is somewhat biased towards non-believers, but as it's not super clear-cut will leave as is.
 table(data$Y3000[is.na(data$Y3080_grp)])
@@ -3639,6 +4182,18 @@ tab_age9 <-data %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9)
 
+table(tab_age9$preg)
+round(prop.table(table(tab_age9$preg)) * 100, 1)
+sum(table(tab_age9$preg))
+
+table(tab_age9$age5)
+round(prop.table(table(tab_age9$age5)) * 100, 1)
+sum(table(tab_age9$age5))
+
+table(tab_age9$age9)
+round(prop.table(table(tab_age9$age9)) * 100, 1)
+sum(table(tab_age9$age9))
+
 
 ### Now repeat, but including 2019 RSBB data
 data_temp_age28 <- data %>%
@@ -3714,6 +4269,22 @@ tab_age28 <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28)
 
+table(tab_age28$preg)
+round(prop.table(table(tab_age28$preg)) * 100, 1)
+sum(table(tab_age28$preg))
+
+table(tab_age28$age5)
+round(prop.table(table(tab_age28$age5)) * 100, 1)
+sum(table(tab_age28$age5))
+
+table(tab_age28$age9)
+round(prop.table(table(tab_age28$age9)) * 100, 1)
+sum(table(tab_age28$age9))
+
+table(tab_age28$age28)
+round(prop.table(table(tab_age28$age28)) * 100, 1)
+sum(table(tab_age28$age28))
+
 ## Interesting patterns. Increase in regular attendance at ages 5 and 9, relative to pregnancy, and then sharp decline to age 28.
 
 # Sample sizes do decrease quite substantially from age 9 to age 28
@@ -3734,6 +4305,8 @@ data <- data %>%
   mutate(pb155_grp = factor(pb155_grp, levels = c("Regular", "Occasional/None")))
 
 table(data$pb155_grp, useNA = "ifany")
+round(prop.table(table(data$pb155_grp)) * 100, 1)
+sum(table(data$pb155_grp))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is somewhat biased towards non-believers, but as it's not super clear-cut will leave as is.
 table(data$pb150[is.na(data$pb155_grp)])
@@ -3752,6 +4325,8 @@ data <- data %>%
   mutate(ph6247_grp = factor(ph6247_grp, levels = c("Regular", "Occasional/None")))
 
 table(data$ph6247_grp, useNA = "ifany")
+round(prop.table(table(data$ph6247_grp)) * 100, 1)
+sum(table(data$ph6247_grp))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is biased towards non-believers, but as it's not super clear-cut (and didn't edit the pregnancy data) will leave as is.
 table(data$ph6240[is.na(data$ph6247_grp)])
@@ -3777,6 +4352,8 @@ data <- data %>%
 
 
 table(data$pj7049_grp, useNA = "ifany")
+round(prop.table(table(data$pj7049_grp)) * 100, 1)
+sum(table(data$pj7049_grp))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is somewhat biased towards non-believers, but as it's not super clear-cut will leave as is.
 table(data$pj7040[is.na(data$pj7049_grp)])
@@ -3810,6 +4387,8 @@ data <- data %>%
   mutate(pm4049_grp = factor(pm4049_grp, levels = c("Regular", "Occasional/None")))
 
 table(data$pm4049_grp, useNA = "ifany")
+round(prop.table(table(data$pm4049_grp)) * 100, 1)
+sum(table(data$pm4049_grp))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is somewhat biased towards non-believers, but as it's not super clear-cut will leave as is.
 table(data$pm4040[is.na(data$pm4049_grp)])
@@ -3830,6 +4409,8 @@ data <- data %>%
   mutate(FC3080_grp = factor(FC3080_grp, levels = c("Regular", "Occasional/None")))
 
 table(data$FC3080_grp, useNA = "ifany")
+round(prop.table(table(data$FC3080_grp)) * 100, 1)
+sum(table(data$FC3080_grp))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data which is somewhat biased towards non-believers, but as it's not super clear-cut will leave as is.
 table(data$FC3000[is.na(data$FC3080_grp)])
@@ -3925,6 +4506,18 @@ tab_age9_p <-data %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9_p)
 
+table(tab_age9_p$preg)
+round(prop.table(table(tab_age9_p$preg)) * 100, 1)
+sum(table(tab_age9_p$preg))
+
+table(tab_age9_p$age5)
+round(prop.table(table(tab_age9_p$age5)) * 100, 1)
+sum(table(tab_age9_p$age5))
+
+table(tab_age9_p$age9)
+round(prop.table(table(tab_age9_p$age9)) * 100, 1)
+sum(table(tab_age9_p$age9))
+
 
 ### Now repeat, but including 2019 RSBB data
 data_temp_age28_p <- data %>%
@@ -3999,6 +4592,22 @@ tab_age28_p <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28_p)
 
+table(tab_age28_p$preg)
+round(prop.table(table(tab_age28_p$preg)) * 100, 1)
+sum(table(tab_age28_p$preg))
+
+table(tab_age28_p$age5)
+round(prop.table(table(tab_age28_p$age5)) * 100, 1)
+sum(table(tab_age28_p$age5))
+
+table(tab_age28_p$age9)
+round(prop.table(table(tab_age28_p$age9)) * 100, 1)
+sum(table(tab_age28_p$age9))
+
+table(tab_age28_p$age28)
+round(prop.table(table(tab_age28_p$age28)) * 100, 1)
+sum(table(tab_age28_p$age28))
+
 ## Very similar pattern of results to the mothers: Slight increase between preg and age 5/9, then drop at at 28
 
 # Again, sample sizes do decrease quite substantially from age 9 to age 28
@@ -4021,6 +4630,8 @@ data <- data %>%
   mutate(d817 = factor(d817, levels = c("Yes", "No")))
 
 table(data$d817, useNA = "ifany")
+round(prop.table(table(data$d817)) * 100, 1)
+sum(table(data$d817))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$d810[is.na(data$d817)])
@@ -4038,6 +4649,8 @@ data <- data %>%
   mutate(k6248 = factor(k6248, levels = c("Yes", "No")))
 
 table(data$k6248, useNA = "ifany")
+round(prop.table(table(data$k6248)) * 100, 1)
+sum(table(data$k6248))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$k6240[is.na(data$k6248)])
@@ -4055,6 +4668,8 @@ data <- data %>%
   mutate(l7050 = factor(l7050, levels = c("Yes", "No")))
 
 table(data$l7050, useNA = "ifany")
+round(prop.table(table(data$l7050)) * 100, 1)
+sum(table(data$l7050))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$l7040[is.na(data$l7050)])
@@ -4070,6 +4685,8 @@ data <- data %>%
   mutate(p4050 = factor(p4050, levels = c("Yes", "No")))
 
 table(data$p4050, useNA = "ifany")
+round(prop.table(table(data$p4050)) * 100, 1)
+sum(table(data$p4050))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$p4040[is.na(data$p4050)])
@@ -4101,6 +4718,8 @@ data <- data %>%
   mutate(Y3090 = factor(Y3090, levels = c("Yes", "No")))
 
 table(data$Y3090, useNA = "ifany")
+round(prop.table(table(data$Y3090)) * 100, 1)
+sum(table(data$Y3090))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$Y3000[is.na(data$Y3090)])
@@ -4172,6 +4791,18 @@ tab_age9 <-data %>%
   rename(preg = d817, age5 = k6248, age9 = p4050) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9)
+
+table(tab_age9$preg)
+round(prop.table(table(tab_age9$preg)) * 100, 1)
+sum(table(tab_age9$preg))
+
+table(tab_age9$age5)
+round(prop.table(table(tab_age9$age5)) * 100, 1)
+sum(table(tab_age9$age5))
+
+table(tab_age9$age9)
+round(prop.table(table(tab_age9$age9)) * 100, 1)
+sum(table(tab_age9$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -4248,6 +4879,22 @@ tab_age28 <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28)
 
+table(tab_age28$preg)
+round(prop.table(table(tab_age28$preg)) * 100, 1)
+sum(table(tab_age28$preg))
+
+table(tab_age28$age5)
+round(prop.table(table(tab_age28$age5)) * 100, 1)
+sum(table(tab_age28$age5))
+
+table(tab_age28$age9)
+round(prop.table(table(tab_age28$age9)) * 100, 1)
+sum(table(tab_age28$age9))
+
+table(tab_age28$age28)
+round(prop.table(table(tab_age28$age28)) * 100, 1)
+sum(table(tab_age28$age28))
+
 ## Stable-ish until age 9, then drops at age 28
 
 # Sample sizes do decrease quite substantially from age 9 to age 28
@@ -4267,6 +4914,8 @@ data <- data %>%
   mutate(pb156 = factor(pb156, levels = c("Yes", "No")))
 
 table(data$pb156, useNA = "ifany")
+round(prop.table(table(data$pb156)) * 100, 1)
+sum(table(data$pb156))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$pb150[is.na(data$pb156)])
@@ -4282,6 +4931,8 @@ data <- data %>%
   mutate(ph6248 = factor(ph6248, levels = c("Yes", "No")))
 
 table(data$ph6248, useNA = "ifany")
+round(prop.table(table(data$ph6248)) * 100, 1)
+sum(table(data$ph6248))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$ph6240[is.na(data$ph6248)])
@@ -4297,6 +4948,8 @@ data <- data %>%
   mutate(pj7050 = factor(pj7050, levels = c("Yes", "No")))
 
 table(data$pj7050, useNA = "ifany")
+round(prop.table(table(data$pj7050)) * 100, 1)
+sum(table(data$pj7050))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$pj7040[is.na(data$pj7050)])
@@ -4312,6 +4965,8 @@ data <- data %>%
   mutate(pm4050 = factor(pm4050, levels = c("Yes", "No")))
 
 table(data$pm4050, useNA = "ifany")
+round(prop.table(table(data$pm4050)) * 100, 1)
+sum(table(data$pm4050))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$pm4040[is.na(data$pm4050)])
@@ -4343,6 +4998,8 @@ data <- data %>%
   mutate(FC3090 = factor(FC3090, levels = c("Yes", "No")))
 
 table(data$FC3090, useNA = "ifany")
+round(prop.table(table(data$FC3090)) * 100, 1)
+sum(table(data$FC3090))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$FC3000[is.na(data$FC3090)])
@@ -4414,6 +5071,18 @@ tab_age9_p <-data %>%
   rename(preg = pb156, age5 = ph6248, age9 = pm4050) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9_p)
+
+table(tab_age9_p$preg)
+round(prop.table(table(tab_age9_p$preg)) * 100, 1)
+sum(table(tab_age9_p$preg))
+
+table(tab_age9_p$age5)
+round(prop.table(table(tab_age9_p$age5)) * 100, 1)
+sum(table(tab_age9_p$age5))
+
+table(tab_age9_p$age9)
+round(prop.table(table(tab_age9_p$age9)) * 100, 1)
+sum(table(tab_age9_p$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -4489,7 +5158,23 @@ tab_age28_p <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28_p)
 
-## Very similar pattern of results to the mothers: Stable from preg to age 9, then slight drop to age 28
+table(tab_age28_p$preg)
+round(prop.table(table(tab_age28_p$preg)) * 100, 1)
+sum(table(tab_age28_p$preg))
+
+table(tab_age28_p$age5)
+round(prop.table(table(tab_age28_p$age5)) * 100, 1)
+sum(table(tab_age28_p$age5))
+
+table(tab_age28_p$age9)
+round(prop.table(table(tab_age28_p$age9)) * 100, 1)
+sum(table(tab_age28_p$age9))
+
+table(tab_age28_p$age28)
+round(prop.table(table(tab_age28_p$age28)) * 100, 1)
+sum(table(tab_age28_p$age28))
+
+## Pretty stable from preg to age 28
 
 # Again, sample sizes do decrease quite substantially from age 9 to age 28
 sum(data_temp_age9_p$freq)
@@ -4511,6 +5196,8 @@ data <- data %>%
   mutate(d818 = factor(d818, levels = c("Yes", "No")))
 
 table(data$d818, useNA = "ifany")
+round(prop.table(table(data$d818)) * 100, 1)
+sum(table(data$d818))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$d810[is.na(data$d818)])
@@ -4528,6 +5215,8 @@ data <- data %>%
   mutate(k6249 = factor(k6249, levels = c("Yes", "No")))
 
 table(data$k6249, useNA = "ifany")
+round(prop.table(table(data$k6249)) * 100, 1)
+sum(table(data$k6249))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$k6240[is.na(data$k6249)])
@@ -4545,6 +5234,8 @@ data <- data %>%
   mutate(l7051 = factor(l7051, levels = c("Yes", "No")))
 
 table(data$l7051, useNA = "ifany")
+round(prop.table(table(data$l7051)) * 100, 1)
+sum(table(data$l7051))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$l7040[is.na(data$l7051)])
@@ -4560,6 +5251,8 @@ data <- data %>%
   mutate(p4051 = factor(p4051, levels = c("Yes", "No")))
 
 table(data$p4051, useNA = "ifany")
+round(prop.table(table(data$p4051)) * 100, 1)
+sum(table(data$p4051))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$p4040[is.na(data$p4051)])
@@ -4591,6 +5284,8 @@ data <- data %>%
   mutate(Y3091 = factor(Y3091, levels = c("Yes", "No")))
 
 table(data$Y3091, useNA = "ifany")
+round(prop.table(table(data$Y3091)) * 100, 1)
+sum(table(data$Y3091))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$Y3000[is.na(data$Y3091)])
@@ -4662,6 +5357,18 @@ tab_age9 <-data %>%
   rename(preg = d818, age5 = k6249, age9 = p4051) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9)
+
+table(tab_age9$preg)
+round(prop.table(table(tab_age9$preg)) * 100, 1)
+sum(table(tab_age9$preg))
+
+table(tab_age9$age5)
+round(prop.table(table(tab_age9$age5)) * 100, 1)
+sum(table(tab_age9$age5))
+
+table(tab_age9$age9)
+round(prop.table(table(tab_age9$age9)) * 100, 1)
+sum(table(tab_age9$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -4738,6 +5445,22 @@ tab_age28 <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28)
 
+table(tab_age28$preg)
+round(prop.table(table(tab_age28$preg)) * 100, 1)
+sum(table(tab_age28$preg))
+
+table(tab_age28$age5)
+round(prop.table(table(tab_age28$age5)) * 100, 1)
+sum(table(tab_age28$age5))
+
+table(tab_age28$age9)
+round(prop.table(table(tab_age28$age9)) * 100, 1)
+sum(table(tab_age28$age9))
+
+table(tab_age28$age28)
+round(prop.table(table(tab_age28$age28)) * 100, 1)
+sum(table(tab_age28$age28))
+
 ## Stable-ish until age 9, then drops at age 28
 
 # Sample sizes do decrease quite substantially from age 9 to age 28
@@ -4757,6 +5480,8 @@ data <- data %>%
   mutate(pb157 = factor(pb157, levels = c("Yes", "No")))
 
 table(data$pb157, useNA = "ifany")
+round(prop.table(table(data$pb157)) * 100, 1)
+sum(table(data$pb157))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$pb150[is.na(data$pb157)])
@@ -4772,6 +5497,8 @@ data <- data %>%
   mutate(ph6249 = factor(ph6249, levels = c("Yes", "No")))
 
 table(data$ph6249, useNA = "ifany")
+round(prop.table(table(data$ph6249)) * 100, 1)
+sum(table(data$ph6249))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$ph6240[is.na(data$ph6249)])
@@ -4787,6 +5514,8 @@ data <- data %>%
   mutate(pj7051 = factor(pj7051, levels = c("Yes", "No")))
 
 table(data$pj7051, useNA = "ifany")
+round(prop.table(table(data$pj7051)) * 100, 1)
+sum(table(data$pj7051))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$pj7040[is.na(data$pj7051)])
@@ -4802,6 +5531,8 @@ data <- data %>%
   mutate(pm4051 = factor(pm4051, levels = c("Yes", "No")))
 
 table(data$pm4051, useNA = "ifany")
+round(prop.table(table(data$pm4051)) * 100, 1)
+sum(table(data$pm4051))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$pm4040[is.na(data$pm4051)])
@@ -4833,6 +5564,8 @@ data <- data %>%
   mutate(FC3091 = factor(FC3091, levels = c("Yes", "No")))
 
 table(data$FC3091, useNA = "ifany")
+round(prop.table(table(data$FC3091)) * 100, 1)
+sum(table(data$FC3091))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$FC3000[is.na(data$FC3091)])
@@ -4904,6 +5637,18 @@ tab_age9_p <-data %>%
   rename(preg = pb157, age5 = ph6249, age9 = pm4051) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9_p)
+
+table(tab_age9_p$preg)
+round(prop.table(table(tab_age9_p$preg)) * 100, 1)
+sum(table(tab_age9_p$preg))
+
+table(tab_age9_p$age5)
+round(prop.table(table(tab_age9_p$age5)) * 100, 1)
+sum(table(tab_age9_p$age5))
+
+table(tab_age9_p$age9)
+round(prop.table(table(tab_age9_p$age9)) * 100, 1)
+sum(table(tab_age9_p$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -4979,6 +5724,22 @@ tab_age28_p <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28_p)
 
+table(tab_age28_p$preg)
+round(prop.table(table(tab_age28_p$preg)) * 100, 1)
+sum(table(tab_age28_p$preg))
+
+table(tab_age28_p$age5)
+round(prop.table(table(tab_age28_p$age5)) * 100, 1)
+sum(table(tab_age28_p$age5))
+
+table(tab_age28_p$age9)
+round(prop.table(table(tab_age28_p$age9)) * 100, 1)
+sum(table(tab_age28_p$age9))
+
+table(tab_age28_p$age28)
+round(prop.table(table(tab_age28_p$age28)) * 100, 1)
+sum(table(tab_age28_p$age28))
+
 ## Very similar pattern of results to the mothers: Stable from preg to age 9, then slight drop to age 28
 
 # Again, sample sizes do decrease quite substantially from age 9 to age 28
@@ -5001,6 +5762,8 @@ data <- data %>%
   mutate(d819 = factor(d819, levels = c("Yes", "No")))
 
 table(data$d819, useNA = "ifany")
+round(prop.table(table(data$d819)) * 100, 1)
+sum(table(data$d819))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$d810[is.na(data$d819)])
@@ -5018,6 +5781,8 @@ data <- data %>%
   mutate(k6250 = factor(k6250, levels = c("Yes", "No")))
 
 table(data$k6250, useNA = "ifany")
+round(prop.table(table(data$k6250)) * 100, 1)
+sum(table(data$k6250))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$k6240[is.na(data$k6250)])
@@ -5035,6 +5800,8 @@ data <- data %>%
   mutate(l7052 = factor(l7052, levels = c("Yes", "No")))
 
 table(data$l7052, useNA = "ifany")
+round(prop.table(table(data$l7052)) * 100, 1)
+sum(table(data$l7052))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$l7040[is.na(data$v)])
@@ -5050,6 +5817,8 @@ data <- data %>%
   mutate(p4052 = factor(p4052, levels = c("Yes", "No")))
 
 table(data$p4052, useNA = "ifany")
+round(prop.table(table(data$p4052)) * 100, 1)
+sum(table(data$p4052))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$p4040[is.na(data$p4052)])
@@ -5067,6 +5836,8 @@ data <- data %>%
   mutate(Y3092 = factor(Y3092, levels = c("Yes", "No")))
 
 table(data$Y3092, useNA = "ifany")
+round(prop.table(table(data$Y3092)) * 100, 1)
+sum(table(data$Y3092))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$Y3000[is.na(data$Y3092)])
@@ -5138,6 +5909,18 @@ tab_age9 <-data %>%
   rename(preg = d819, age5 = k6250, age9 = p4052) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9)
+
+table(tab_age9$preg)
+round(prop.table(table(tab_age9$preg)) * 100, 1)
+sum(table(tab_age9$preg))
+
+table(tab_age9$age5)
+round(prop.table(table(tab_age9$age5)) * 100, 1)
+sum(table(tab_age9$age5))
+
+table(tab_age9$age9)
+round(prop.table(table(tab_age9$age9)) * 100, 1)
+sum(table(tab_age9$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -5214,6 +5997,22 @@ tab_age28 <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28)
 
+table(tab_age28$preg)
+round(prop.table(table(tab_age28$preg)) * 100, 1)
+sum(table(tab_age28$preg))
+
+table(tab_age28$age5)
+round(prop.table(table(tab_age28$age5)) * 100, 1)
+sum(table(tab_age28$age5))
+
+table(tab_age28$age9)
+round(prop.table(table(tab_age28$age9)) * 100, 1)
+sum(table(tab_age28$age9))
+
+table(tab_age28$age28)
+round(prop.table(table(tab_age28$age28)) * 100, 1)
+sum(table(tab_age28$age28))
+
 ## Stable-ish until age 9, then drops at age 28
 
 # Sample sizes do decrease quite substantially from age 9 to age 28
@@ -5233,6 +6032,8 @@ data <- data %>%
   mutate(pb158 = factor(pb158, levels = c("Yes", "No")))
 
 table(data$pb158, useNA = "ifany")
+round(prop.table(table(data$pb158)) * 100, 1)
+sum(table(data$pb158))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$pb150[is.na(data$pb158)])
@@ -5248,6 +6049,8 @@ data <- data %>%
   mutate(ph6250 = factor(ph6250, levels = c("Yes", "No")))
 
 table(data$ph6250, useNA = "ifany")
+round(prop.table(table(data$ph6250)) * 100, 1)
+sum(table(data$ph6250))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$ph6240[is.na(data$ph6250)])
@@ -5263,6 +6066,8 @@ data <- data %>%
   mutate(pj7052 = factor(pj7052, levels = c("Yes", "No")))
 
 table(data$pj7052, useNA = "ifany")
+round(prop.table(table(data$pj7052)) * 100, 1)
+sum(table(data$pj7052))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$pj7040[is.na(data$pj7052)])
@@ -5278,6 +6083,8 @@ data <- data %>%
   mutate(pm4052 = factor(pm4052, levels = c("Yes", "No")))
 
 table(data$pm4052, useNA = "ifany")
+round(prop.table(table(data$pm4052)) * 100, 1)
+sum(table(data$pm4052))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$pm4040[is.na(data$pm4052)])
@@ -5296,6 +6103,8 @@ data <- data %>%
   mutate(FC3092 = factor(FC3092, levels = c("Yes", "No")))
 
 table(data$FC3092, useNA = "ifany")
+round(prop.table(table(data$FC3092)) * 100, 1)
+sum(table(data$FC3092))
 
 # See if missing and answered 'no' or 'not sure' to belief in a divine power, as could code as 'no' (as question not really relevant to atheists/agnostics). Is some missing data, but not especially biased towards non-believers, so will leave as is.
 table(data$FC3000[is.na(data$FC3092)])
@@ -5367,6 +6176,18 @@ tab_age9_p <-data %>%
   rename(preg = pb158, age5 = ph6250, age9 = pm4052) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9_p)
+
+table(tab_age9_p$preg)
+round(prop.table(table(tab_age9_p$preg)) * 100, 1)
+sum(table(tab_age9_p$preg))
+
+table(tab_age9_p$age5)
+round(prop.table(table(tab_age9_p$age5)) * 100, 1)
+sum(table(tab_age9_p$age5))
+
+table(tab_age9_p$age9)
+round(prop.table(table(tab_age9_p$age9)) * 100, 1)
+sum(table(tab_age9_p$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -5441,6 +6262,22 @@ tab_age28_p <-data %>%
   rename(preg = pb158, age5 = ph6250, age9 = pm4052, age28 = FC3092) %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28_p)
+
+table(tab_age28_p$preg)
+round(prop.table(table(tab_age28_p$preg)) * 100, 1)
+sum(table(tab_age28_p$preg))
+
+table(tab_age28_p$age5)
+round(prop.table(table(tab_age28_p$age5)) * 100, 1)
+sum(table(tab_age28_p$age5))
+
+table(tab_age28_p$age9)
+round(prop.table(table(tab_age28_p$age9)) * 100, 1)
+sum(table(tab_age28_p$age9))
+
+table(tab_age28_p$age28)
+round(prop.table(table(tab_age28_p$age28)) * 100, 1)
+sum(table(tab_age28_p$age28))
 
 ## Slight decrease with age (but very low n...)
 
@@ -5630,18 +6467,28 @@ summary(data)
 
 ## Pregnancy
 table(data$mum_preg_lca, useNA = "ifany")
+round(prop.table(table(data$mum_preg_lca)) * 100, 1)
+sum(table(data$mum_preg_lca))
 
 ## Age 5
 table(data$mum_age5_lca, useNA = "ifany")
+round(prop.table(table(data$mum_age5_lca)) * 100, 1)
+sum(table(data$mum_age5_lca))
 
 ## Age 6
 table(data$mum_age6_lca, useNA = "ifany")
+round(prop.table(table(data$mum_age6_lca)) * 100, 1)
+sum(table(data$mum_age6_lca))
 
 ## Age 9
 table(data$mum_age9_lca, useNA = "ifany")
+round(prop.table(table(data$mum_age9_lca)) * 100, 1)
+sum(table(data$mum_age9_lca))
 
 ## 2019 (Age 28)
 table(data$mum_age28_lca, useNA = "ifany")
+round(prop.table(table(data$mum_age28_lca)) * 100, 1)
+sum(table(data$mum_age28_lca))
 
 
 ## Turn this data into a sankey plot - Both for pregnancy to 2019, and just from pregnancy to age 9 (as less missing data)
@@ -5710,6 +6557,18 @@ tab_age9 <-data %>%
   rename(preg = mum_preg_lca, age5 = mum_age5_lca, age9 = mum_age9_lca) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9)
+
+table(tab_age9$preg)
+round(prop.table(table(tab_age9$preg)) * 100, 1)
+sum(table(tab_age9$preg))
+
+table(tab_age9$age5)
+round(prop.table(table(tab_age9$age5)) * 100, 1)
+sum(table(tab_age9$age5))
+
+table(tab_age9$age9)
+round(prop.table(table(tab_age9$age9)) * 100, 1)
+sum(table(tab_age9$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -5786,6 +6645,22 @@ tab_age28 <-data %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28)
 
+table(tab_age28$preg)
+round(prop.table(table(tab_age28$preg)) * 100, 1)
+sum(table(tab_age28$preg))
+
+table(tab_age28$age5)
+round(prop.table(table(tab_age28$age5)) * 100, 1)
+sum(table(tab_age28$age5))
+
+table(tab_age28$age9)
+round(prop.table(table(tab_age28$age9)) * 100, 1)
+sum(table(tab_age28$age9))
+
+table(tab_age28$age28)
+round(prop.table(table(tab_age28$age28)) * 100, 1)
+sum(table(tab_age28$age28))
+
 ## Overall increase in atheists over time, while general decrease in all other categories - Is a strange pattern at age 5, though, where the number of 'highly religious' increases (and 'moderately religious' increases) from preg to age 5, but then reverses again at age 9.
 
 # Sample sizes do decrease quite substantially from age 9 to age 28
@@ -5797,18 +6672,28 @@ sum(data_temp_age28$freq)
 
 ## Pregnancy
 table(data$ptnr_preg_lca, useNA = "ifany")
+round(prop.table(table(data$ptnr_preg_lca)) * 100, 1)
+sum(table(data$ptnr_preg_lca))
 
 ## Age 5
 table(data$ptnr_age5_lca, useNA = "ifany")
+round(prop.table(table(data$ptnr_age5_lca)) * 100, 1)
+sum(table(data$ptnr_age5_lca))
 
 ## Age 6
 table(data$ptnr_age6_lca, useNA = "ifany")
+round(prop.table(table(data$ptnr_age6_lca)) * 100, 1)
+sum(table(data$ptnr_age6_lca))
 
 ## Age 9
 table(data$ptnr_age9_lca, useNA = "ifany")
+round(prop.table(table(data$ptnr_age9_lca)) * 100, 1)
+sum(table(data$ptnr_age9_lca))
 
 ## 2019 (Age 28)
 table(data$ptnr_age28_lca, useNA = "ifany")
+round(prop.table(table(data$ptnr_age28_lca)) * 100, 1)
+sum(table(data$ptnr_age28_lca))
 
 
 ## Turn this data into a sankey plot - Both for pregnancy to 2019, and just from pregnancy to age 9 (as less missing data)
@@ -5877,6 +6762,18 @@ tab_age9_p <-data %>%
   rename(preg = ptnr_preg_lca, age5 = ptnr_age5_lca, age9 = ptnr_age9_lca) %>%
   filter(complete.cases(preg, age5, age9))
 summary(tab_age9_p)
+
+table(tab_age9_p$preg)
+round(prop.table(table(tab_age9_p$preg)) * 100, 1)
+sum(table(tab_age9_p$preg))
+
+table(tab_age9_p$age5)
+round(prop.table(table(tab_age9_p$age5)) * 100, 1)
+sum(table(tab_age9_p$age5))
+
+table(tab_age9_p$age9)
+round(prop.table(table(tab_age9_p$age9)) * 100, 1)
+sum(table(tab_age9_p$age9))
 
 
 ### Now repeat, but including 2019 RSBB data
@@ -5951,6 +6848,22 @@ tab_age28_p <-data %>%
   rename(preg = ptnr_preg_lca, age5 = ptnr_age5_lca, age9 = ptnr_age9_lca, age28 = ptnr_age28_lca) %>%
   filter(complete.cases(preg, age5, age9, age28))
 summary(tab_age28_p)
+
+table(tab_age28_p$preg)
+round(prop.table(table(tab_age28_p$preg)) * 100, 1)
+sum(table(tab_age28_p$preg))
+
+table(tab_age28_p$age5)
+round(prop.table(table(tab_age28_p$age5)) * 100, 1)
+sum(table(tab_age28_p$age5))
+
+table(tab_age28_p$age9)
+round(prop.table(table(tab_age28_p$age9)) * 100, 1)
+sum(table(tab_age28_p$age9))
+
+table(tab_age28_p$age28)
+round(prop.table(table(tab_age28_p$age28)) * 100, 1)
+sum(table(tab_age28_p$age28))
 
 ## General decrease in religiosity with age
 
